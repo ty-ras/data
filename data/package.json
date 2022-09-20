@@ -1,0 +1,35 @@
+{
+  "name": "@ty-ras/data",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stanislav Muhametsin",
+    "email": "346799+stazz@users.noreply.github.com",
+    "url": "https://github.com/stazz"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ty-ras/data"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "yarn run tsc && yarn run lint",
+    "tsc": "tsc",
+    "lint": "eslint ./src --ext .ts,.tsx",
+    "test:coverage": "c8 ava",
+    "test:run": "ava"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "5.38.0",
+    "@typescript-eslint/parser": "5.38.0",
+    "ava": "4.3.3",
+    "c8": "7.12.0",
+    "eslint": "8.23.1",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "prettier": "2.7.1",
+    "ts-node": "10.9.1",
+    "typescript": "4.8.3"
+  }
+}

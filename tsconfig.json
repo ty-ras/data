@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "es2020",
+    "moduleResolution": "node",
+    "lib": [
+      "ES2021"
+    ],
+    "target": "ES2021",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "declaration": true,
+    "noErrorTruncation": true,
+    "incremental": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+}
