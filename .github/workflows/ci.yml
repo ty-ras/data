@@ -1,0 +1,42 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+    - develop
+  push: # Run this pipeline also after merging to develop, to report code coverage to codecov for this branch
+    branches:
+    - develop
+
+jobs:
+  build_and_test:
+    strategy:
+      matrix:
+        dir: [ data ]
+    runs-on: ubuntu-latest
+    name: Build and test ${{ matrix.dir }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - id: build
+        name: Build ${{ matrix.dir }}
+        shell: bash
+        run: |
+          set -e
+          
+          ./scripts/build.sh '${{ matrix.dir }}'
+      
+      - id: test
+        name: Test ${{ matrix.dir }}
+        shell: bash
+        run: |
+          set -e
+
+          ./scripts/test.sh '${{ matrix.dir }}' coverage
+
+      - uses: codecov/codecov-action@v3
+        with:
+          flags: ${{ matrix.dir }}
+          directory: ${{ matrix.dir }}
