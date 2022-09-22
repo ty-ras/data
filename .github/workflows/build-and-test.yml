@@ -63,6 +63,7 @@ jobs:
       # Run build *after* tests - since tests no longer require transpiled JS to run
       # We still want to run build to catch any TS error possibly lurking somewhere.
       # Because we test first and build then, we can at this point remove the whole __tests__ directory.
+      # Remember to also remove 'type' property from package.json, as it is no longer needed at this point.
       - id: build
         name: Build ${{ matrix.dir }}
         shell: bash
@@ -70,6 +71,7 @@ jobs:
           set -e
 
           rm -rf '${{ matrix.dir }}/src/__test__'
+          cat '${{ matrix.dir }}/package.json' | jq -M 'del(.type)' > '${{ matrix.dir }}/package.json'
           ./scripts/build.sh '${{ matrix.dir }}'
 
       - id: coverage
