@@ -71,8 +71,10 @@ jobs:
           set -e
 
           rm -rf '${{ matrix.dir }}/src/__test__'
-          cat '${{ matrix.dir }}/package.json' | jq -M 'del(.type)'
+          cat '${{ matrix.dir }}/package.json' | jq -M 'del(.type)' > '${{ matrix.dir }}/package.json'
+          echo "Debug1"
           cat '${{ matrix.dir }}/package.json' # If we don't do this, there will be complaint about package.json containing invalid JSON.
+          echo "Debug2"
           ./scripts/build.sh '${{ matrix.dir }}'
 
       - id: coverage

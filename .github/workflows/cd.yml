@@ -10,7 +10,7 @@ on:
 # I guess that is possible if I would create separate folder for the action, but right now it seems like too heavy approach.
 # Worth investigating later tho.
 jobs:
-  ci_job:
+  cd_job:
     uses: ./.github/workflows/build-and-test.yml
     with:
       fetch-depth: 0 # We must fetch whole history to be able to search for tags in pre-run-function
