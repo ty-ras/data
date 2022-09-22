@@ -19,6 +19,8 @@ jobs:
         run: |
           set -e
 
+          exit 5 # This file is WIP
+
           CURRENT_BRANCH="${GITHUB_REF#refs/heads/}"
           if [[ "${CURRENT_BRANCH}" != "main" ]]; then
             echo 'This action can only be run on main branch!' 1>&2
