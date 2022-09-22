@@ -2,4 +2,4 @@
 
 . 'scripts/preamble.sh'
 
-yarn run build
+yarn install --frozen-lockfile
