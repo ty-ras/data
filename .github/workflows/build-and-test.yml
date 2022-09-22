@@ -72,7 +72,7 @@ jobs:
 
           rm -rf '${{ matrix.dir }}/src/__test__'
           cat '${{ matrix.dir }}/package.json' | jq -M 'del(.type)' > '${{ matrix.dir }}/package.json'
-          cat '${{ matrix.dir }}/package.json' > /dev/null # If we don't do this, there will be complaint about package.json containing invalid JSON.
+          cat '${{ matrix.dir }}/package.json' # If we don't do this, there will be complaint about package.json containing invalid JSON.
           ./scripts/build.sh '${{ matrix.dir }}'
 
       - id: coverage
