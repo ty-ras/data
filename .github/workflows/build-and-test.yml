@@ -15,7 +15,7 @@ on:
             echo 'No pre-run.'
           }
       post-run-function:
-        require: false
+        required: false
         type: string
         default: |
           tyras_post_run ()
