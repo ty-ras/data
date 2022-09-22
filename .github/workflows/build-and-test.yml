@@ -72,6 +72,7 @@ jobs:
 
           rm -rf '${{ matrix.dir }}/src/__test__'
           cat '${{ matrix.dir }}/package.json' | jq -M 'del(.type)' > '${{ matrix.dir }}/package.json'
+          cat '${{ matrix.dir }}/package.json'
           ./scripts/build.sh '${{ matrix.dir }}'
 
       - id: coverage
