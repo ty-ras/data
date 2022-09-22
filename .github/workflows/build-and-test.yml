@@ -43,15 +43,7 @@ jobs:
 
           ${{ inputs.pre-run-function }}
           tyras_pre_run '${{ matrix.dir }}'
-      
-      - id: build
-        name: Build ${{ matrix.dir }}
-        shell: bash
-        run: |
-          set -e
-
-          ./scripts/build.sh '${{ matrix.dir }}'
-      
+           
       - id: test
         name: Test ${{ matrix.dir }}
         shell: bash
@@ -59,6 +51,18 @@ jobs:
           set -e
 
           ./scripts/test.sh '${{ matrix.dir }}' coverage
+
+      # Run build *after* tests - since tests no longer require transpiled JS to run
+      # We still want to run build to catch any TS error possibly lurking somewhere.
+      # Because we test first and build then, we can at this point remove the whole __tests__ directory.
+      - id: build
+        name: Build ${{ matrix.dir }}
+        shell: bash
+        run: |
+          set -e
+
+          rm -rf '${{ matrix.dir }}/src/__test__'
+          ./scripts/build.sh '${{ matrix.dir }}'
 
       - id: coverage
         name: Upload coverage for '${{ matrix.dir }}'
