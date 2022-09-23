@@ -22,6 +22,9 @@ on:
           {
             echo 'No post-run.'
           }
+    secrets:
+      npm-publish-token:
+        required: false
 
 jobs:
   build_and_test:
@@ -93,3 +96,5 @@ jobs:
 
           ${{ inputs.post-run-function }}
           tyras_post_run '${{ matrix.dir }}'
+        env:
+          NPM_PUBLISH_TOKEN: secrets.npm-publish-token

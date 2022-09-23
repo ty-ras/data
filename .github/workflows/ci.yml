@@ -2,7 +2,7 @@ name: CI Pipeline
 
 # On each commit to PR to main branch.
 on:
-  push: # pull_request:
+  pull_request:
     branches:
     - main
 

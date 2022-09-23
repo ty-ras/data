@@ -26,7 +26,7 @@ jobs:
             cd "$1"
             cp ../LICENSE ./LICENSE.txt
             yarn install --no-save "@jsdevtools/npm-publish@$(cat versions/npm-publish)"
-            ./node_modules/.bin/npm-publish --access public --token '${{ secrets.NPM_PUBLISH_TOKEN }}'
+            ./node_modules/.bin/npm-publish --access public --token "${NPM_PUBLISH_TOKEN}"
 
             git config --global user.email "cd-automation@ty-ras.project"
             git config --global user.name "CD Automation"
@@ -37,3 +37,4 @@ jobs:
             git push origin "${GIT_TAG_NAME}"
           fi
         }
+      npm-publish-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
