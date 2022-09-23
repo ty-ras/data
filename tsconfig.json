@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "es2020",
+    "module": "es2022",
     "moduleResolution": "node",
     "lib": [
-      "ES2021"
+      "ES2022"
     ],
-    "target": "ES2021",
+    "target": "ES2022",
     "esModuleInterop": true,
     // No code minimization/uglification is happening, thus preserving source maps does not bring much value.
     // Furthermore, because .js and .mjs files will reside in the same directory, there will be a little hassle on the mapping file names + their refs in source.
