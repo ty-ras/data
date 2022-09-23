@@ -97,4 +97,4 @@ jobs:
           ${{ inputs.post-run-function }}
           tyras_post_run '${{ matrix.dir }}'
         env:
-          NPM_PUBLISH_TOKEN: secrets.npm-publish-token
+          NPM_PUBLISH_TOKEN: ${{ secrets.npm-publish-token }}
