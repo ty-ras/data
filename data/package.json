@@ -28,9 +28,12 @@
     }
   },
   "scripts": {
-    "build": "yarn run tsc && yarn run lint",
-    "tsc": "tsc",
+    "build:run": "yarn run lint && yarn run tsc",
+    "build:ci": "yarn run clear-build-artifacts && yarn run build && yarn run rename-js-to-mjs && yarn run tsc --module CommonJS",
+    "clear-build-artifacts": "rm -rf dist build",
     "lint": "eslint ./src --ext .ts,.tsx",
+    "rename-js-to-mjs": "find dist -name '*.js' -type f -exec sh -c 'for f in \"$@\"; do mv -- \"$f\" \"${f%.js}.mjs\"; done' -- {} +",
+    "tsc": "tsc",
     "test:coverage": "c8 ava",
     "test:run": "ava"
   },

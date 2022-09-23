@@ -28,7 +28,7 @@ jobs:
       post-run-function: |
         tyras_post_run ()
         {
-          echo "TODO: clean up test files, run npm publish, and push tag"
+          echo "TODO: run npm publish, and push tag"
         }
 
 # jobs:
