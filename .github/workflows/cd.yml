@@ -2,7 +2,7 @@ name: CD Pipeline
 
 # After each successful PR merge to main branch.
 on:
-  pull_request: # push:
+  push:
     branches:
     - main
 

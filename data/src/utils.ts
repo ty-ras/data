@@ -15,7 +15,7 @@ export const transitiveDataValidation =
     }
   };
 
-export const omit = <T extends Record<string, unknown>, TKey extends keyof T>(
+export const omit = <T extends object, TKey extends keyof T>(
   obj: T,
   ...keys: ReadonlyArray<TKey>
 ) => {
@@ -42,14 +42,14 @@ export const exceptionAsValidationError = (
   getHumanReadableMessage: () => `${exception}`,
 });
 
-export const transformEntries = <T extends Record<string, unknown>, TResult>(
+export const transformEntries = <T extends object, TResult>(
   record: T,
   transform: (item: T[keyof T], paramName: keyof T) => TResult,
 ): { [P in keyof T]: ReturnType<typeof transform> } => {
   return Object.fromEntries(
     Object.entries(record).map(([key, value]) => [
       key,
-      transform(value as Parameters<typeof transform>[0], key),
+      transform(value as Parameters<typeof transform>[0], key as keyof T),
     ]),
   ) as { [P in keyof T]: ReturnType<typeof transform> };
 };
