@@ -5,3 +5,4 @@ dist
 coverage
 .yarn
 */.eslintrc.cjs
+*/tsconfig.json
