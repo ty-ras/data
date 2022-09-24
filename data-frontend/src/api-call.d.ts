@@ -3,6 +3,7 @@ import type * as protocol from "@ty-ras/protocol";
 import type * as data from "@ty-ras/data";
 
 export type APICall<TArgs, TReturnType> = (
+  this: void,
   args: protocol.RuntimeOf<TArgs>,
 ) => Promise<APICallResult<TReturnType>>;
 

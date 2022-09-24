@@ -28,7 +28,7 @@ export interface APICallFactory<
       (TProtocolSpec extends protocol.ProtocolSpecHeaders<
         Record<string, THeaders>
       >
-        ? MakeAPICallArgsHeadersFunctionality<Record<string, THeaders>>
+        ? MakeAPICallArgsHeadersFunctionality<TProtocolSpec["headers"]>
         : {}) &
       (TProtocolSpec extends protocol.ProtocolSpecResponseHeaders<
         infer TResponseHeaders
