@@ -16,7 +16,7 @@ export class ValidationCombiner<
     private readonly _state: TRequiredValidators & TOptionalValidators,
   ) {}
 
-  public withInput<
+  public withValidator<
     TName extends string,
     TDataValidator extends common.DataValidator<any, unknown>,
   >(
@@ -37,7 +37,7 @@ export class ValidationCombiner<
         TOptionalValidators
       >
     : never;
-  public withInput<
+  public withValidator<
     TName extends string,
     TDataValidator extends common.DataValidator<any, unknown>,
   >(
@@ -59,7 +59,7 @@ export class ValidationCombiner<
       >
     : never;
 
-  public withInput<
+  public withValidator<
     TName extends string,
     TDataValidator extends common.DataValidator<any, unknown>,
   >(
@@ -169,6 +169,7 @@ export class ValidationCombiner<
         };
   }
 }
+
 export const newCombiner = (): ValidationCombiner<{}, {}> =>
   new ValidationCombiner({});
 
