@@ -8,4 +8,7 @@ The protocol specification is checked both at compile-time and run-time to verif
 This all is done in such way that it does not make development tedious or boring, but instead robust and fun!
 
 This particular repository contains generic data validation related libraries, and is designed to be consumed by other TyRAS libraries:
-- [data](./data) contains some core types and utility methods to handle data validation.
+- [data](./data) contains some core types and utility methods to handle data validation,
+- [protocol](./protocol) contains protocol-related types for other libraries to build their own types on,
+- [data-frontend](./data-frontend) contains types and utility methods to create callbacks to invoke backend endpoints from frontend, and
+- [data-backend](./data-backend) contains types and utility methods to handle data validation on backend side.

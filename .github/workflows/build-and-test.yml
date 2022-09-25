@@ -30,7 +30,7 @@ jobs:
   build_and_test:
     strategy:
       matrix:
-        dir: [ data, protocol, data-frontend ]
+        dir: [ data, protocol, data-frontend, data-backend ]
     runs-on: ubuntu-latest
     name: Build and test ${{ matrix.dir }}
     steps:
@@ -53,7 +53,7 @@ jobs:
         run: |
           set -e
 
-          ./scripts/install.sh '${{ matrix.dir }}'
+          ./scripts/install.sh '${{ matrix.dir }}' --frozen-lockfile
 
       - id: test
         name: Test ${{ matrix.dir }}
