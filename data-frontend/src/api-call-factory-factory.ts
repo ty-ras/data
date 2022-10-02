@@ -11,6 +11,8 @@ export const createAPICallFactory = <THKTEncoded extends protocol.HKTEncoded>(
   ) => apiCallFactory.APICallFactory<THKTEncoded, keyof THeaders & string>;
 } => {
   return {
+    // TODO: Fix this overly complex function
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     withHeaders: (headers) => ({
       makeAPICall: <
         TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>,
@@ -123,63 +125,61 @@ export const createAPICallFactory = <THKTEncoded extends protocol.HKTEncoded>(
             ...(args ?? {}),
             url: args ? args.url : undefined,
           });
-          switch (validatedArgs.error) {
-            case "none": {
-              const httpArgs: HTTPInvocationArguments = {
-                method: validatedMethod.data,
-                ...validatedArgs.data,
-              };
-              if ("headers" in rest) {
-                httpArgs.headers = validatedArgs.data.headers;
-              }
-              if ("headersFunctionality" in rest) {
-                httpArgs.headers = Object.assign(
-                  httpArgs.headers ?? {},
-                  Object.fromEntries(
-                    await Promise.all(
-                      Object.entries(rest.headersFunctionality).map(
-                        async ([headerName, headerFunctionalityID]) =>
-                          [
+          if (validatedArgs.error === "none") {
+            const httpArgs: HTTPInvocationArguments = {
+              method: validatedMethod.data,
+              ...validatedArgs.data,
+            };
+            if ("headers" in rest) {
+              httpArgs.headers = validatedArgs.data.headers;
+            }
+            if ("headersFunctionality" in rest) {
+              httpArgs.headers = Object.assign(
+                httpArgs.headers ?? {},
+                Object.fromEntries(
+                  await Promise.all(
+                    Object.entries(rest.headersFunctionality).map(
+                      async ([headerName, headerFunctionalityID]) =>
+                        [
+                          headerName,
+                          await headers[headerFunctionalityID]({
+                            ...httpArgs,
                             headerName,
-                            await headers[headerFunctionalityID]({
-                              ...httpArgs,
-                              headerName,
-                            }),
-                          ] as const,
-                      ),
+                          }),
+                        ] as const,
                     ),
                   ),
-                );
-              }
-              const { body: rawBody, headers: responseHeadersRaw } =
-                await callHttpEndpoint(httpArgs);
-              if ("responseHeaders" in rest) {
-                const responseHeaders = rest.responseHeaders(
-                  responseHeadersRaw ?? {},
-                );
-                if (responseHeaders.error === "none") {
-                  const body = response(rawBody);
-                  return body.error === "none"
-                    ? {
-                        error: "none",
-                        data: {
-                          body: body.data,
-                          headers: responseHeaders.data,
-                        },
-                      }
-                    : body;
-                } else {
-                  return responseHeaders;
-                }
-              } else {
-                return response(rawBody);
-              }
+                ),
+              );
             }
-            default:
-              return {
-                error: "error-input",
-                errorInfo: validatedArgs.errorInfo,
-              };
+            const { body: rawBody, headers: responseHeadersRaw } =
+              await callHttpEndpoint(httpArgs);
+            if ("responseHeaders" in rest) {
+              const responseHeaders = rest.responseHeaders(
+                responseHeadersRaw ?? {},
+              );
+              if (responseHeaders.error === "none") {
+                const body = response(rawBody);
+                return body.error === "none"
+                  ? {
+                      error: "none",
+                      data: {
+                        body: body.data,
+                        headers: responseHeaders.data,
+                      },
+                    }
+                  : body;
+              } else {
+                return responseHeaders;
+              }
+            } else {
+              return response(rawBody);
+            }
+          } else {
+            return {
+              error: "error-input",
+              errorInfo: validatedArgs.errorInfo,
+            };
           }
           // TODO fix this 'as any' at some point
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
