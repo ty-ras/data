@@ -15,15 +15,15 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      "Header-Name": validatorForValue("header-value"),
+      [HEADER_NAME]: validatorForValue(HEADER_VALUE),
     },
-    "header-value",
+    HEADER_VALUE,
     false,
-    "Header-Name",
+    HEADER_NAME,
     [
       true,
       {
-        "Header-Name": "header-value",
+        [HEADER_NAME]: HEADER_VALUE,
       },
       {},
     ],
@@ -33,15 +33,15 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      "Header-Name": validatorForValue("header-value"),
+      [HEADER_NAME]: validatorForValue(HEADER_VALUE),
     },
-    "header-value",
+    HEADER_VALUE,
     true,
     "header-name",
     [
       true,
       {
-        "Header-Name": "header-value",
+        [HEADER_NAME]: HEADER_VALUE,
       },
       {},
     ],
@@ -51,18 +51,18 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      "Header-Name": validatorForValue("header-value"),
+      "Header-Name": validatorForValue(HEADER_VALUE),
     },
-    "not-header-value",
+    NOT_HEADER_VALUE,
     false,
-    "Header-Name",
+    HEADER_NAME,
     [
       false,
       {},
       {
-        "Header-Name": {
+        [HEADER_NAME]: {
           error: "error",
-          errorInfo: "not-header-value",
+          errorInfo: NOT_HEADER_VALUE,
           getHumanReadableMessage,
         },
       },
@@ -73,24 +73,24 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      "Header-Name-Ok": validatorForValue("header-value"),
-      "Header-Name": validatorForValue("header-value"),
+      "Header-Name-Ok": validatorForValue(HEADER_VALUE),
+      [HEADER_NAME]: validatorForValue(HEADER_VALUE),
     },
     {
-      "Header-Name-Ok": "header-value",
-      "Header-Name": "not-header-value",
+      "Header-Name-Ok": HEADER_VALUE,
+      [HEADER_NAME]: NOT_HEADER_VALUE,
     },
     false,
-    ["Header-Name-Ok", "Header-Name"],
+    ["Header-Name-Ok", HEADER_NAME],
     [
       false,
       {
-        "Header-Name-Ok": "header-value",
+        "Header-Name-Ok": HEADER_VALUE,
       },
       {
-        "Header-Name": {
+        [HEADER_NAME]: {
           error: "error",
-          errorInfo: "not-header-value",
+          errorInfo: NOT_HEADER_VALUE,
           getHumanReadableMessage,
         },
       },
@@ -147,3 +147,7 @@ const validatorForValue =
       : { error: "error", errorInfo: data, getHumanReadableMessage };
 
 const getHumanReadableMessage = () => "";
+
+const HEADER_VALUE = "header-value";
+const HEADER_NAME = "Header-Name";
+const NOT_HEADER_VALUE = `not-${HEADER_VALUE}`;

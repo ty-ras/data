@@ -7,12 +7,9 @@ export const transitiveDataValidation =
   ): common.DataValidator<TInput, TOutput> =>
   (input) => {
     const intermediate = first(input);
-    switch (intermediate.error) {
-      case "none":
-        return second(intermediate.data);
-      default:
-        return intermediate;
-    }
+    return intermediate.error === "none"
+      ? second(intermediate.data)
+      : intermediate;
   };
 
 export const omit = <T extends object, TKey extends keyof T>(
