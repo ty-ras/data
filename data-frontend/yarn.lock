@@ -350,15 +350,15 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
-"@ty-ras/data@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@ty-ras/data/-/data-0.9.0.tgz#bd5912357929408ecb4fdb6291f856bba98940ad"
-  integrity sha512-gqDEzajaquCUYpcWgAS4j3mjR8U+ArzO81VVs+18NodtOw2N+rNTZocxFGV/dcg8bIbAfDAvaDx8xoj0e1kodw==
+"@ty-ras/data@0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@ty-ras/data/-/data-0.10.0.tgz#003b652e30805d11dd786f6e22626cea2fdb73a8"
+  integrity sha512-u8ZEukzo9Zuhu+lLpgufS0cRAidagsNyDL4eSaeg0o9jahol1wP22PUI/CjgZN2v8V3FQHTdb6k82cteWZn11A==
 
-"@ty-ras/protocol@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@ty-ras/protocol/-/protocol-0.9.0.tgz#b4f79a7c52d6bedfb727d6a8aad3c110630a8a0b"
-  integrity sha512-bpbHrdFzmVQoWglvYJEFHh4voi3qcvHHzqjd35YUaIgzRbixQoPfh3Ugf5lRDTUxgXbBBYabus8yWOfS+v7e7g==
+"@ty-ras/protocol@0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@ty-ras/protocol/-/protocol-0.10.0.tgz#10e51e76b0a914d01a3ec5f6cc20937159b5fc38"
+  integrity sha512-9tgJwIGjDAbfBcw2HlXx5db9GZLEVM7uz+NY51OFvnvkhQU6zZm6l9aNJGvMIJlr1ynP/nxNCx2eIdP+cNRTzQ==
 
 "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.4"
