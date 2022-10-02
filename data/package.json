@@ -30,6 +30,8 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@babel/core": "7.19.3",
+    "@babel/eslint-parser": "7.19.1",
     "@typescript-eslint/eslint-plugin": "5.38.0",
     "@typescript-eslint/parser": "5.38.0",
     "ava": "4.3.3",
