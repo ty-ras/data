@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import test, { ExecutionContext } from "ava";
-import type * as data from "@ty-ras/data";
 import * as spec from "../utils";
-import { isDeepStrictEqual } from "util";
+import * as common from "./common";
+import type * as data from "@ty-ras/data";
 import type * as s from "../string";
 
 test("Test default parameter regexp", (t) => {
@@ -15,7 +15,7 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      [HEADER_NAME]: validatorForValue(HEADER_VALUE),
+      [HEADER_NAME]: common.validatorForValue(HEADER_VALUE),
     },
     HEADER_VALUE,
     false,
@@ -33,7 +33,7 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      [HEADER_NAME]: validatorForValue(HEADER_VALUE),
+      [HEADER_NAME]: common.validatorForValue(HEADER_VALUE),
     },
     HEADER_VALUE,
     true,
@@ -51,7 +51,7 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      "Header-Name": validatorForValue(HEADER_VALUE),
+      "Header-Name": common.validatorForValue(HEADER_VALUE),
     },
     NOT_HEADER_VALUE,
     false,
@@ -63,7 +63,7 @@ test("Test checkHeaders work", (t) => {
         [HEADER_NAME]: {
           error: "error",
           errorInfo: NOT_HEADER_VALUE,
-          getHumanReadableMessage,
+          getHumanReadableMessage: common.getHumanReadableMessage,
         },
       },
     ],
@@ -73,8 +73,8 @@ test("Test checkHeaders work", (t) => {
   performCheckHeadersTest(
     t,
     {
-      "Header-Name-Ok": validatorForValue(HEADER_VALUE),
-      [HEADER_NAME]: validatorForValue(HEADER_VALUE),
+      "Header-Name-Ok": common.validatorForValue(HEADER_VALUE),
+      [HEADER_NAME]: common.validatorForValue(HEADER_VALUE),
     },
     {
       "Header-Name-Ok": HEADER_VALUE,
@@ -91,7 +91,7 @@ test("Test checkHeaders work", (t) => {
         [HEADER_NAME]: {
           error: "error",
           errorInfo: NOT_HEADER_VALUE,
-          getHumanReadableMessage,
+          getHumanReadableMessage: common.getHumanReadableMessage,
         },
       },
     ],
@@ -101,7 +101,11 @@ test("Test checkHeaders work", (t) => {
 
 const performCheckHeadersTest = <THeadersData extends s.RuntimeAnyStringData>(
   t: ExecutionContext,
-  validators: s.StringDataValidators<THeadersData, data.HeaderValue, boolean>,
+  validators: s.StringDataValidators<
+    THeadersData,
+    data.ReadonlyHeaderValue,
+    boolean
+  >,
   headerValues: data.HeaderValue | Record<string, data.HeaderValue>,
   lowercaseHeaderName: boolean,
   expectedHeaderNames: data.OneOrMany<string>,
@@ -138,15 +142,6 @@ const performCheckHeadersTest = <THeadersData extends s.RuntimeAnyStringData>(
     `The header names must match`,
   );
 };
-
-const validatorForValue =
-  <T>(value: T): data.DataValidator<unknown, T> =>
-  (data) =>
-    isDeepStrictEqual(data, value)
-      ? { error: "none", data: data as any }
-      : { error: "error", errorInfo: data, getHumanReadableMessage };
-
-const getHumanReadableMessage = () => "";
 
 const HEADER_VALUE = "header-value";
 const HEADER_NAME = "Header-Name";

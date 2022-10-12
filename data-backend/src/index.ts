@@ -30,19 +30,8 @@ export type {
   QueryValidatorSpec,
   RuntimeAnyQuery,
 } from "./query";
-export type {
-  DataValidatorRequestInput,
-  DataValidatorRequestInputSpec,
-  DataValidatorResponseInputValidatorSpec,
-  TInputContentsBase,
-} from "./request-body";
-export type {
-  DataValidatorResponseOutput,
-  DataValidatorResponseOutputSpec,
-  DataValidatorResponseOutputSuccess,
-  DataValidatorResponseOutputValidatorSpec,
-  TOutputContentsBase,
-} from "./response-body";
+export * from "./request-body";
+export * from "./response-body";
 export type {
   RuntimeAnyStringData,
   StringDataValidatorSpec,

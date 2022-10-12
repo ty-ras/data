@@ -1,6 +1,6 @@
 {
   "name": "@ty-ras/data-frontend",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "author": {
     "name": "Stanislav Muhametsin",
     "email": "346799+stazz@users.noreply.github.com",
@@ -13,6 +13,7 @@
   },
   "files": [
     "./src",
+    "./dist-ts",
     "./dist-mjs",
     "./dist-cjs",
     "README.md",
@@ -21,17 +22,17 @@
   "type": "module",
   "main": "./dist-cjs/index.js",
   "module": "./dist-mjs/index.mjs",
-  "types": "./src/index.ts",
+  "types": "./dist-ts/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist-ts/index.d.ts",
       "import": "./dist-mjs/index.mjs",
       "require": "./dist-cjs/index.js"
     }
   },
   "dependencies": {
-    "@ty-ras/data": "0.10.2",
-    "@ty-ras/protocol": "0.10.0"
+    "@ty-ras/data": "0.11.1",
+    "@ty-ras/protocol": "0.11.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.3",

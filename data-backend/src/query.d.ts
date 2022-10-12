@@ -7,12 +7,12 @@ export type QueryValidatorSpec<
 > = s.StringDataValidatorSpec<
   TQueryData,
   s.WithDecoder<TDecoder>,
-  data.QueryValue,
+  data.ReadonlyQueryValue,
   QueryValidationAdditionalMetadata
 >;
 
 export type QueryDataValidators<TQueryData extends RuntimeAnyQuery> =
-  s.StringDataValidators<TQueryData, data.QueryValue, true>;
+  s.StringDataValidators<TQueryData, data.ReadonlyQueryValue, true>;
 
 export type QueryDataValidatorSpecMetadata<
   TQueryNames extends string,
