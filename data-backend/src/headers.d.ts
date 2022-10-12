@@ -15,7 +15,10 @@ export type HeaderDataValidatorSpec<
 > = s.StringDataValidatorSpec<
   THeaderData,
   TDecoderOrEncoder,
-  data.HeaderValue,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  TDecoderOrEncoder extends s.WithDecoder<infer _>
+    ? data.ReadonlyHeaderValue
+    : data.HeaderValue,
   HeaderValidationAdditionalMetadata
 >;
 
@@ -47,6 +50,10 @@ export type ResponseHeaderDataValidators<
 export type HeaderDataValidators<
   THeaderData extends RuntimeAnyHeaders,
   IsDecoder extends boolean,
-> = s.StringDataValidators<THeaderData, data.HeaderValue, IsDecoder>;
+> = s.StringDataValidators<
+  THeaderData,
+  true extends IsDecoder ? data.ReadonlyHeaderValue : data.HeaderValue,
+  IsDecoder
+>;
 
 export type RuntimeAnyHeaders = Record<string, unknown>;
