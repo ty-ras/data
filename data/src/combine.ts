@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type * as common from "./common";
 
+// TODO This will probably be removed when #21 is being worked on.
 export class ValidationCombiner<
   TRequiredValidators extends Record<
     string,
