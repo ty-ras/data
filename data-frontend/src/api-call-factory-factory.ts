@@ -80,7 +80,6 @@ export const createAPICallFactory = <THKTEncoded extends protocol.HKTEncoded>(
             );
           }
         }
-
         const componentValidations = data
           .newCombiner()
           .withValidator(
@@ -88,7 +87,7 @@ export const createAPICallFactory = <THKTEncoded extends protocol.HKTEncoded>(
             typeof url === "string"
               ? data.transitiveDataValidation(
                   undefinedValidator,
-                  () => ({ error: "none", data: url } as const),
+                  returnURL(url),
                 )
               : url,
           )
@@ -226,3 +225,10 @@ const undefinedValidator: data.DataValidator<unknown, undefined> = (data) =>
   data === undefined
     ? { error: "none", data }
     : { error: "error", errorInfo: data, getHumanReadableMessage: () => "" };
+
+const returnURL =
+  (url: string): data.DataValidator<undefined, string> =>
+  () => ({
+    error: "none",
+    data: url,
+  });
