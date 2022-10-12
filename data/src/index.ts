@@ -12,4 +12,11 @@ export type {
 } from "./common";
 export * from "./utils";
 export * from "./combine";
-export type { HeaderValue, QueryValue } from "./values";
+export type {
+  HeaderValue,
+  QueryValue,
+  StringValue,
+  ReadonlyHeaderValue,
+  ReadonlyQueryValue,
+  ReadonlyStringValue,
+} from "./values";
