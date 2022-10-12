@@ -1,13 +1,8 @@
 import type * as common from "@ty-ras/data";
 
-export interface ContextValidatorSpec<TInput, TOutput, TState> {
-  validator: ContextValidator<TInput, TOutput>;
-  getState: (ctx: TOutput) => TState;
-}
-
-export type ContextValidator<TInput, TOutput> = common.DataValidator<
-  TInput,
-  TOutput,
+export type StateValidator<TContext, TState> = common.DataValidator<
+  TContext,
+  TState,
   | common.DataValidatorResultError
   | {
       error: "protocol-error";
