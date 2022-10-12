@@ -1,15 +1,13 @@
 import type * as common from "./common";
 
 export const transitiveDataValidation =
-  <TInput, TOutput, TIntermediate>(
-    first: common.DataValidator<TInput, TIntermediate>,
-    second: common.DataValidator<TIntermediate, TOutput>,
-  ): common.DataValidator<TInput, TOutput> =>
+  <TInput, TOutput, TIntermediate, TError, TError2>(
+    first: common.DataValidator<TInput, TIntermediate, TError>,
+    second: common.DataValidator<TIntermediate, TOutput, TError2>,
+  ): common.DataValidator<TInput, TOutput, TError | TError2> =>
   (input) => {
     const intermediate = first(input);
-    return intermediate.error === "none"
-      ? second(intermediate.data)
-      : intermediate;
+    return isSuccess(intermediate) ? second(intermediate.data) : intermediate;
   };
 
 export const omit = <T extends object, TKey extends keyof T>(
@@ -50,3 +48,11 @@ export const transformEntries = <T extends object, TResult>(
     ]),
   ) as { [P in keyof T]: ReturnType<typeof transform> };
 };
+
+const isSuccess = <T>(
+  response: unknown,
+): response is common.DataValidatorResultSuccess<T> =>
+  !!response &&
+  typeof response === "object" &&
+  "error" in response &&
+  (response as common.DataValidatorResultSuccess<T>).error === "none";

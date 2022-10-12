@@ -1,35 +1,42 @@
 import test from "ava";
 import * as spec from "../utils";
+import type * as common from "../common";
 
 test("Test transitiveDataValidation works", (t) => {
   t.plan(3);
   const getHumanReadableMessage1 = () => "Must be string";
   const getHumanReadableMessage2 = () => "Must be int string";
+  const stringValidation: common.DataValidator<unknown, string> = (data) =>
+    typeof data === "string"
+      ? { error: "none", data }
+      : {
+          error: "error",
+          errorInfo: getHumanReadableMessage1(),
+          getHumanReadableMessage: getHumanReadableMessage1,
+        };
+  const parseIntValidation: common.DataValidator<
+    string,
+    number,
+    { error: "error-custom" } & Omit<common.DataValidatorResultError, "error">
+  > = (str) => {
+    const maybeInt = parseInt(str);
+    return isNaN(maybeInt)
+      ? {
+          error: "error-custom",
+          errorInfo: getHumanReadableMessage2(),
+          getHumanReadableMessage: getHumanReadableMessage2,
+        }
+      : {
+          error: "none",
+          data: maybeInt,
+        };
+  };
   const intString = spec.transitiveDataValidation(
-    (data) =>
-      typeof data === "string"
-        ? { error: "none", data }
-        : {
-            error: "error",
-            errorInfo: getHumanReadableMessage1(),
-            getHumanReadableMessage: getHumanReadableMessage1,
-          },
-    (str) => {
-      const maybeInt = parseInt(str);
-      return isNaN(maybeInt)
-        ? {
-            error: "error",
-            errorInfo: getHumanReadableMessage2(),
-            getHumanReadableMessage: getHumanReadableMessage2,
-          }
-        : {
-            error: "none",
-            data: maybeInt,
-          };
-    },
+    stringValidation,
+    parseIntValidation,
   );
   t.deepEqual(intString("Hello"), {
-    error: "error",
+    error: "error-custom",
     errorInfo: getHumanReadableMessage2(),
     getHumanReadableMessage: getHumanReadableMessage2,
   });

@@ -1,3 +1,11 @@
-export type HeaderValue = string | Array<string> | undefined;
+export type HeaderValue = StringValue;
 
-export type QueryValue = string | Array<string> | undefined;
+export type QueryValue = StringValue;
+
+export type StringValue = string | Array<string> | undefined;
+
+export type ReadonlyHeaderValue = ReadonlyStringValue;
+
+export type ReadonlyQueryValue = ReadonlyStringValue;
+
+export type ReadonlyStringValue = string | ReadonlyArray<string> | undefined;
