@@ -1,13 +1,12 @@
 import * as data from "@ty-ras/data";
 import type * as stream from "stream";
-import * as rawbody from "raw-body";
 
 export const requestBody = <T, TContentType extends string, TValidator>(
   validatorNative: TValidator,
   validator: data.DataValidator<unknown, T>,
   supportedContentType: TContentType,
   strictContentType: boolean,
-  opts: rawbody.Options | undefined,
+  readBody: ReadBody,
 ): DataValidatorRequestInputSpec<T, Record<TContentType, TValidator>> => {
   const jsonValidation = data.transitiveDataValidation(
     (inputString: string) => {
@@ -37,11 +36,8 @@ export const requestBody = <T, TContentType extends string, TValidator>(
         (!strictContentType && contentType.length === 0)
         ? // stream._decoder || (state && (state.encoding || state.decoder))
           jsonValidation(
-            await rawbody.default(input, {
-              ...(opts ?? {}),
-              // TODO get encoding from headers (or perhaps content type value? e.g. application/json;encoding=utf8)
-              encoding: opts?.encoding ?? "utf8",
-            }),
+            // TODO get encoding from headers (or perhaps content type value? e.g. application/json;encoding=utf8)
+            await readBody(input, "utf8"),
           )
         : {
             error: "unsupported-content-type",
@@ -55,6 +51,11 @@ export const requestBody = <T, TContentType extends string, TValidator>(
     },
   };
 };
+
+export type ReadBody = (
+  readable: stream.Readable,
+  encoding: string,
+) => Promise<string>;
 
 export interface DataValidatorRequestInputSpec<
   TData,

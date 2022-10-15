@@ -5,7 +5,6 @@ import test from "ava";
 import * as spec from "../request-body";
 import * as common from "./common";
 import * as stream from "stream";
-import type * as rawbody from "raw-body";
 import type * as data from "@ty-ras/data";
 
 test("Validate requestBody works", async (c) => {
@@ -69,7 +68,7 @@ test("Validate requestBody works", async (c) => {
     },
   );
   c.deepEqual(
-    await createRequestBody(data, false, { encoding: "utf16le" }).validator({
+    await createRequestBody(data, false, "utf16le").validator({
       contentType: common.CONTENT_TYPE,
       input: stream.Readable.from([
         Buffer.from(JSON.stringify(data), "utf16le"),
@@ -152,23 +151,33 @@ test("Validate request body detects invalid JSON", async (c) => {
 const createRequestBody = <T>(
   value: T,
   strictContentType = false,
-  opts: rawbody.Options | undefined = undefined,
+  overrideEncoding?: string,
 ) =>
   createRequestBodyWithValidator(
     common.validatorForValue(value),
     strictContentType,
-    opts,
+    overrideEncoding,
   );
 
 const createRequestBodyWithValidator = <T>(
   validator: data.DataValidator<unknown, T>,
   strictContentType = false,
-  opts: rawbody.Options | undefined = undefined,
+  overrideEncoding?: string,
 ) =>
   spec.requestBody(
     common.VALIDATOR_NATIVE,
     validator,
     common.CONTENT_TYPE,
     strictContentType,
-    opts,
+    async (readable, encoding) => {
+      const blocks: Array<string> = [];
+      for await (const block of readable) {
+        blocks.push(
+          block instanceof Buffer
+            ? block.toString((overrideEncoding ?? encoding) as BufferEncoding)
+            : `${block}`,
+        );
+      }
+      return blocks.join("");
+    },
   );
