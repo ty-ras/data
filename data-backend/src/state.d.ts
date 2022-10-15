@@ -1,7 +1,7 @@
 import type * as common from "@ty-ras/data";
 
-export type StateValidator<TContext, TState> = common.DataValidator<
-  TContext,
+export type StateValidator<TState> = common.DataValidator<
+  unknown,
   TState,
   | common.DataValidatorResultError
   | {
@@ -10,3 +10,5 @@ export type StateValidator<TContext, TState> = common.DataValidator<
       body: string | undefined;
     }
 >;
+
+export type StateValidatorResult<TState> = ReturnType<StateValidator<TState>>;
