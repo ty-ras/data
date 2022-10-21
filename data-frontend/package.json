@@ -52,7 +52,7 @@
   },
   "scripts": {
     "build:run": "yarn run lint && yarn run tsc",
-    "build:ci": "yarn run clear-build-artifacts && yarn run compile-d-ts-files && yarn run tsc --outDir ./dist-esm && yarn run tsc --module CommonJS --outDir ./dist-cjs && yarn run rename-js-to-esm && yarn run format-output-files",
+    "build:ci": "yarn run clear-build-artifacts && yarn run compile-d-ts-files && yarn run tsc --outDir ./dist-esm && yarn run tsc --module CommonJS --outDir ./dist-cjs && yarn run rename-js-to-cjs && yarn run format-output-files",
     "clear-build-artifacts": "rm -rf dist dist-ts dist-cjs dist-esm build",
     "compile-d-ts-files": "yarn run tsc --removeComments false --emitDeclarationOnly --declaration --declarationDir ./dist-ts && yarn run copy-d-ts-files && yarn run tsc:plain --project tsconfig.out.json",
     "copy-d-ts-files": "find ./src -mindepth 1 -maxdepth 1 -name '*.d.ts' -exec cp {} ./dist-ts +",
