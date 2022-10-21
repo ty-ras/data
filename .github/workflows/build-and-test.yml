@@ -89,6 +89,7 @@ jobs:
 
           ./scripts/build.sh '${{ matrix.dir }}' ci
           if [[ -d '${{ matrix.dir }}/dist-cjs' ]]; then
+            sudo chmod -R o=rwX '${{ matrix.dir }}/dist-cjs'
             cat '${{ matrix.dir }}/package.json' | jq -M 'del(.files, .type, .main, .module, .types, .exports)' > '${{ matrix.dir }}/dist-cjs/package.json'
           fi
 
