@@ -31,7 +31,7 @@
     }
   },
   "dependencies": {
-    "@ty-ras/data": "0.12.0",
+    "@ty-ras/data": "0.12.1",
     "@ty-ras/protocol": "0.12.0"
   },
   "devDependencies": {
