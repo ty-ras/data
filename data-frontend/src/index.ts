@@ -7,6 +7,11 @@ export type {
   GetAPICall,
   GetAPICalls,
   GetProtocolReturnType,
+  APICallError,
+  APICallResultBackendError,
+  APICallResultError,
+  APICallResultInputError,
+  APICallResultSuccess,
 } from "./api-call";
 export type {
   APICallFactory,
