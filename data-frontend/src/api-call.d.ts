@@ -8,13 +8,30 @@ export type APICall<TArgs, TReturnType> = (
 ) => Promise<APICallResult<TReturnType>>;
 
 export type APICallResult<TReturnType> =
-  | data.DataValidatorResult<protocol.RuntimeOf<TReturnType>>
-  | {
-      error: "error-input";
-      errorInfo: Partial<{
-        [P in "method" | "url" | "query" | "body"]: data.ValidationChainError;
-      }>;
-    };
+  | APICallResultSuccess<TReturnType>
+  | APICallResultError;
+
+export type APICallResultSuccess<TReturnType> = data.DataValidatorResultSuccess<
+  protocol.RuntimeOf<TReturnType>
+>;
+
+export type APICallResultError =
+  | APICallResultBackendError
+  | APICallResultInputError;
+
+export type APICallResultBackendError = data.DataValidatorResultError;
+
+export type APICallResultInputError = {
+  error: "error-input";
+  errorInfo: Partial<{
+    [P in "method" | "url" | "query" | "body"]: data.ValidationChainError;
+  }>;
+};
+
+export type APICallError = Exclude<
+  APICallResult<never>,
+  data.DataValidatorResultSuccess<never>
+>;
 
 export type GetAPICall<
   TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>,
