@@ -1,19 +1,19 @@
 import type * as data from "@ty-ras/data";
 
 export interface StringDataValidatorSpec<
-  THeaderData extends RuntimeAnyStringData,
+  TStringData extends RuntimeAnyStringData,
   TDecoderOrEncoder,
   TSerializedValue,
   // eslint-disable-next-line @typescript-eslint/ban-types
   TAdditionalMetadata extends Record<string, unknown> = {},
 > {
   validators: StringDataValidators<
-    THeaderData,
+    TStringData,
     TSerializedValue,
     TDecoderOrEncoder extends WithDecoder<unknown> ? true : false
   >;
   metadata: StringDataValidatorSpecMetadata<
-    keyof THeaderData & string,
+    keyof TStringData & string,
     TDecoderOrEncoder & TAdditionalMetadata
   >;
 }
@@ -26,13 +26,13 @@ export type StringDataValidatorSpecMetadata<
 };
 
 export type StringDataValidators<
-  THeaderData extends RuntimeAnyStringData,
+  TStringData extends RuntimeAnyStringData,
   TSerializedValue,
   IsDecoder extends boolean,
 > = {
-  [P in keyof THeaderData]-?: data.DataValidator<
-    true extends IsDecoder ? TSerializedValue : THeaderData[P],
-    true extends IsDecoder ? THeaderData[P] : TSerializedValue
+  [P in keyof TStringData]-?: data.DataValidator<
+    true extends IsDecoder ? TSerializedValue : TStringData[P],
+    true extends IsDecoder ? TStringData[P] : TSerializedValue
   >;
 };
 
