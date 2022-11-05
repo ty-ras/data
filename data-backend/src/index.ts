@@ -4,7 +4,6 @@
 export type { StateValidator, StateValidatorResult } from "./state";
 export type {
   RuntimeAnyURLData,
-  URLParameterSpec,
   URLParameterValidationAdditionalMetadata,
   URLParameterValidatorSpec,
   URLParameterValidatorSpecMetadata,
