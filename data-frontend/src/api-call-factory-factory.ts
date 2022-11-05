@@ -3,7 +3,9 @@ import * as data from "@ty-ras/data";
 import type * as apiCall from "./api-call";
 import type * as apiCallFactory from "./api-call-factory";
 
-export const createAPICallFactory = <THKTEncoded extends protocol.HKTEncoded>(
+export const createAPICallFactoryGeneric = <
+  THKTEncoded extends protocol.HKTEncodedBase,
+>(
   callHttpEndpoint: CallHTTPEndpoint,
 ): {
   withHeaders: <THeaders extends Record<string, HeaderProvider>>(

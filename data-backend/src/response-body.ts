@@ -1,7 +1,7 @@
 import * as data from "@ty-ras/data";
 import type * as stream from "stream";
 
-export const responseBody = <
+export const responseBodyGeneric = <
   TOutput,
   TSerialized,
   TContentType extends string,
