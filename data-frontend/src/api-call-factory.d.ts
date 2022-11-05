@@ -4,7 +4,7 @@ import type * as data from "@ty-ras/data";
 import type * as apiCall from "./api-call";
 
 export interface APICallFactory<
-  THKTEncoded extends protocol.HKTEncoded,
+  THKTEncoded extends protocol.HKTEncodedBase,
   THeaders extends string,
 > {
   makeAPICall<TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>>(
@@ -86,7 +86,7 @@ export interface MakeAPICallArgsURLData<TURLData> {
 }
 
 export interface MakeAPICallArgsQuery<
-  THKTEncoded extends protocol.HKTEncoded,
+  THKTEncoded extends protocol.HKTEncodedBase,
   TQueryData,
 > {
   query: data.DataValidator<
@@ -96,7 +96,7 @@ export interface MakeAPICallArgsQuery<
 }
 
 export interface MakeAPICallArgsBody<
-  THKTEncoded extends protocol.HKTEncoded,
+  THKTEncoded extends protocol.HKTEncodedBase,
   TBodyData,
 > {
   body: data.DataValidator<
