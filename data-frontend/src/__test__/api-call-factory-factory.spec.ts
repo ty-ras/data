@@ -124,7 +124,7 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
   t.throws(
     () =>
       spec
-        .createAPICallFactory(httpCall)
+        .createAPICallFactoryGeneric(httpCall)
         .withHeaders({})
         .makeAPICall<APIEndpoint>("POST" as any, {
           url,
@@ -138,7 +138,7 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
   t.throws(
     () =>
       spec
-        .createAPICallFactory(httpCall)
+        .createAPICallFactoryGeneric(httpCall)
         .withHeaders({ auth: () => "dummyHeaderValue" })
         .makeAPICall<APIEndpointWithHeaderFunctionality>("GET", {
           url,
@@ -157,7 +157,7 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
 
   t.deepEqual(
     await spec
-      .createAPICallFactory(httpCall)
+      .createAPICallFactoryGeneric(httpCall)
       .withHeaders({})
       .makeAPICall<APIEndpointWithHeaderData>("GET", {
         url,
@@ -238,7 +238,7 @@ const performOneTest = async <
   response: spec.HTTPInvocationResult,
   getAPICall: (args: {
     apiCallFactory: factory.APICallFactory<
-      protocol.HKTEncoded,
+      protocol.HKTEncodedBase,
       keyof THeaders & string
     >;
     expectedArg: TExpectedArg;
@@ -260,7 +260,7 @@ const performOneTestOrError = async <
   response: spec.HTTPInvocationResult,
   getAPICall: (args: {
     apiCallFactory: factory.APICallFactory<
-      protocol.HKTEncoded,
+      protocol.HKTEncodedBase,
       keyof THeaders & string
     >;
     expectedArg: TExpectedArg;
@@ -272,7 +272,7 @@ const performOneTestOrError = async <
   const expectedResponses: Array<spec.HTTPInvocationResult> = [response];
   let currentIndex = 0;
   const apiCallFactory = spec
-    .createAPICallFactory((httpArgs) => {
+    .createAPICallFactoryGeneric((httpArgs) => {
       calledArgs.push(httpArgs);
       return Promise.resolve(expectedResponses[currentIndex++]);
     })

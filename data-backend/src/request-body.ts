@@ -1,7 +1,7 @@
 import * as data from "@ty-ras/data";
 import type * as stream from "stream";
 
-export const requestBody = <T, TContentType extends string, TValidator>(
+export const requestBodyGeneric = <T, TContentType extends string, TValidator>(
   validatorNative: TValidator,
   validator: data.DataValidator<unknown, T>,
   supportedContentType: TContentType,

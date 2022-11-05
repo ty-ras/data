@@ -164,7 +164,7 @@ const createRequestBodyWithValidator = <T>(
   strictContentType = false,
   overrideEncoding?: string,
 ) =>
-  spec.requestBody(
+  spec.requestBodyGeneric(
     common.VALIDATOR_NATIVE,
     validator,
     common.CONTENT_TYPE,
