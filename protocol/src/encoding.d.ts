@@ -6,7 +6,7 @@ export interface Encoded<TRuntime, TEncoded> {
 }
 
 // Higher-kinded-type trick from: https://www.matechs.com/blog/encoding-hkts-in-typescript-once-again
-export interface HKTEncoded {
+export interface HKTEncodedBase {
   // readonly _TRuntimeSpec?: unknown;
   readonly _TEncodedSpec?: unknown;
   // readonly typeRuntime?: unknown;
@@ -35,7 +35,7 @@ export type GetRuntimeArray<T> = Array<RuntimeOf<T>>;
 //     })["typeRuntime"]
 //   : never; // This is simplified version from original HKT pattern in the link, because we don't use the functional properties of this specific HKT.
 
-export type EncodedOf<F extends HKTEncoded, TSpec> = F extends {
+export type EncodedOf<F extends HKTEncodedBase, TSpec> = F extends {
   readonly typeEncoded: unknown;
 }
   ? (F & {
