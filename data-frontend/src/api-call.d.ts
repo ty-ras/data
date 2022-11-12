@@ -5,15 +5,14 @@ import type * as data from "@ty-ras/data";
 export type APICall<TArgs, TReturnType> = (
   this: void,
   args: protocol.RuntimeOf<TArgs>,
-) => Promise<APICallResult<TReturnType>>;
+) => Promise<APICallResult<protocol.RuntimeOf<TReturnType>>>;
 
 export type APICallResult<TReturnType> =
   | APICallResultSuccess<TReturnType>
   | APICallResultError;
 
-export type APICallResultSuccess<TReturnType> = data.DataValidatorResultSuccess<
-  protocol.RuntimeOf<TReturnType>
->;
+export type APICallResultSuccess<TReturnType> =
+  data.DataValidatorResultSuccess<TReturnType>;
 
 export type APICallResultError =
   | APICallResultBackendError
