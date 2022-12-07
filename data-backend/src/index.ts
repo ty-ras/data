@@ -30,8 +30,6 @@ export type {
   QueryValidatorSpec,
   RuntimeAnyQuery,
 } from "./query";
-export * from "./request-body";
-export * from "./response-body";
 export type {
   RuntimeAnyStringData,
   StringDataValidatorSpec,
@@ -40,4 +38,7 @@ export type {
   WithDecoder,
   WithEncoder,
 } from "./string";
+export * from "./errors";
+export * from "./request-body";
+export * from "./response-body";
 export * from "./utils";
