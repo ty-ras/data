@@ -1,4 +1,5 @@
 import * as data from "@ty-ras/data";
+import * as errors from "./errors";
 import type * as stream from "stream";
 
 export const responseBodyGeneric = <
@@ -8,7 +9,11 @@ export const responseBodyGeneric = <
   TValidator,
 >(
   validation: TValidator,
-  validator: data.DataValidator<TOutput, TSerialized>,
+  validator: data.DataValidator<
+    TOutput,
+    TSerialized,
+    DataValidatorResponseOutputError
+  >,
   supportedContentType: TContentType,
 ): DataValidatorResponseOutputSpec<
   TOutput,
@@ -30,7 +35,13 @@ export const responseBodyGeneric = <
         return result;
       }
     } catch (e) {
-      return data.exceptionAsValidationError(e);
+      return e instanceof errors.HTTPError
+        ? {
+            error: "protocol-error",
+            statusCode: e.statusCode,
+            body: e.body,
+          }
+        : data.exceptionAsValidationError(e);
     }
   },
   validatorSpec: {
@@ -50,8 +61,13 @@ export interface DataValidatorResponseOutputSpec<
 
 export type DataValidatorResponseOutput<TOutput> = data.DataValidator<
   TOutput,
-  DataValidatorResponseOutputSuccess
+  DataValidatorResponseOutputSuccess,
+  data.DataValidatorResultError | errors.HTTPProtocolError
 >;
+
+export type DataValidatorResponseOutputError =
+  | data.DataValidatorResultError
+  | errors.HTTPProtocolError;
 
 export type DataValidatorResponseOutputSuccess = {
   contentType: string;

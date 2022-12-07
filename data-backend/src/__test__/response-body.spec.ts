@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import test from "ava";
 import * as spec from "../response-body";
+import * as errors from "../errors";
 import * as common from "./common";
 import type * as data from "@ty-ras/data";
 
@@ -43,6 +44,17 @@ test("Validate response body detects invalid JSON", (c) => {
     --> starting at object with constructor 'Object'
     --- property 'a' closes the circle`,
     ),
+  });
+});
+
+test("Validate response body detects HTTPError", (c) => {
+  const { validator } = createResponseBodyWithValidator(() => {
+    throw new errors.HTTPError(404);
+  });
+  c.deepEqual(validator("ignored"), {
+    error: "protocol-error",
+    statusCode: 404,
+    body: undefined,
   });
 });
 
