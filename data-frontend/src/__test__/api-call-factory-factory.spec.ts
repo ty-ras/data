@@ -15,9 +15,9 @@ test("API Call Factory Factory works", async (t) => {
     { method: "GET", url: "dummy" },
     { body: { protocol: "APIEndpoint" } },
     ({ apiCallFactory, expectedArg: { url } }) =>
-      apiCallFactory.makeAPICall<APIEndpoint>("GET", {
+      apiCallFactory.makeAPICall<APIEndpoint>({
         url,
-        method: validatorForValue("GET"),
+        method: "GET",
         response: validatorForValue({ protocol: "APIEndpoint" }),
       })(),
   );
@@ -27,9 +27,9 @@ test("API Call Factory Factory works", async (t) => {
     { method: "GET", url: "dummy", headers: { Authorization: "token" } },
     { body: { protocol: "APIEndpointWithHeaderFunctionality" } },
     ({ apiCallFactory, expectedArg: { url } }) =>
-      apiCallFactory.makeAPICall<APIEndpointWithHeaderFunctionality>("GET", {
+      apiCallFactory.makeAPICall<APIEndpointWithHeaderFunctionality>({
         url,
-        method: validatorForValue("GET"),
+        method: "GET",
         response: validatorForValue({
           protocol: "APIEndpointWithHeaderFunctionality",
         }),
@@ -48,9 +48,9 @@ test("API Call Factory Factory works", async (t) => {
     },
     { body: { protocol: "APIEndpointWithHeaderData" } },
     ({ apiCallFactory, expectedArg: { url } }) =>
-      apiCallFactory.makeAPICall<APIEndpointWithHeaderData>("GET", {
+      apiCallFactory.makeAPICall<APIEndpointWithHeaderData>({
         url,
-        method: validatorForValue("GET"),
+        method: "GET",
         response: validatorForValue({
           protocol: "APIEndpointWithHeaderData",
         }),
@@ -72,9 +72,9 @@ test("API Call Factory Factory works", async (t) => {
       headers: { "X-Custom-Response-Header": "ResponseHeaderValue" },
     },
     ({ apiCallFactory, expectedArg: { url } }) =>
-      apiCallFactory.makeAPICall<APIEndpointWithResponseHeaders>("GET", {
+      apiCallFactory.makeAPICall<APIEndpointWithResponseHeaders>({
         url,
-        method: validatorForValue("GET"),
+        method: "GET",
         response: validatorForValue({
           protocol: "APIEndpointWithResponseHeaders",
         }),
@@ -95,9 +95,9 @@ test("API Call Factory Factory works", async (t) => {
       },
     },
     ({ apiCallFactory, expectedArg: { url } }) =>
-      apiCallFactory.makeAPICall<APIEndpointWithResponseHeaders>("GET", {
+      apiCallFactory.makeAPICall<APIEndpointWithResponseHeaders>({
         url,
-        method: validatorForValue("GET"),
+        method: "GET",
         response: validatorForValue({
           protocol: "APIEndpointWithResponseHeaders",
         }),
@@ -116,7 +116,7 @@ test("API Call Factory Factory works", async (t) => {
 });
 
 test("API Call Factory Factory detects erroneous parameters", async (t) => {
-  t.plan(3);
+  t.plan(2);
   const httpCall: spec.CallHTTPEndpoint = () => {
     throw new Error("This should not be called");
   };
@@ -125,24 +125,10 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
     () =>
       spec
         .createAPICallFactoryGeneric(httpCall)
-        .withHeaders({})
-        .makeAPICall<APIEndpoint>("POST" as any, {
-          url,
-          method: validatorForValue("GET"),
-          response: validatorForValue({ protocol: "APIEndpoint" }),
-        }),
-    {
-      message: 'Invalid method: "POST".',
-    },
-  );
-  t.throws(
-    () =>
-      spec
-        .createAPICallFactoryGeneric(httpCall)
         .withHeaders({ auth: () => "dummyHeaderValue" })
-        .makeAPICall<APIEndpointWithHeaderFunctionality>("GET", {
+        .makeAPICall<APIEndpointWithHeaderFunctionality>({
           url,
-          method: validatorForValue("GET"),
+          method: "GET",
           response: validatorForValue({
             protocol: "APIEndpointWithHeaderFunctionality",
           }),
@@ -159,9 +145,9 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
     await spec
       .createAPICallFactoryGeneric(httpCall)
       .withHeaders({})
-      .makeAPICall<APIEndpointWithHeaderData>("GET", {
+      .makeAPICall<APIEndpointWithHeaderData>({
         url,
-        method: validatorForValue("GET"),
+        method: "GET",
         response: validatorForValue({ protocol: "APIEndpointWithHeaderData" }),
         headers: validatorForValue({
           "X-Custom-Header": "HeaderValue",
