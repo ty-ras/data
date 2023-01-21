@@ -8,7 +8,6 @@ export interface APICallFactory<
   THeaders extends string,
 > {
   makeAPICall<TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>>(
-    method: TProtocolSpec["method"],
     args: MakeAPICallArgs<
       TProtocolSpec["method"],
       TProtocolSpec["responseBody"]
@@ -39,7 +38,7 @@ export interface APICallFactory<
 }
 
 export interface MakeAPICallArgs<TMethod, TResponse> {
-  method: data.DataValidator<unknown, TMethod>;
+  method: TMethod;
   response: data.DataValidator<unknown, protocol.RuntimeOf<TResponse>>;
 }
 

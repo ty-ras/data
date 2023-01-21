@@ -18,40 +18,37 @@ export const createAPICallFactoryGeneric = <
     withHeaders: (headers) => ({
       makeAPICall: <
         TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>,
-      >(
-        methodValue: TProtocolSpec["method"],
-        {
-          method,
-          response,
-          url,
-          ...rest
-        }:
-          | (apiCallFactory.MakeAPICallArgs<
-              TProtocolSpec["method"],
-              TProtocolSpec["responseBody"]
-            > &
-              (
-                | apiCallFactory.MakeAPICallArgsURL
-                | apiCallFactory.MakeAPICallArgsURLData<unknown>
-              )) &
-              // eslint-disable-next-line @typescript-eslint/ban-types
-              (| {}
-                | apiCallFactory.MakeAPICallArgsHeadersData<
-                    Record<string, unknown>
-                  >
-                | apiCallFactory.MakeAPICallArgsHeadersFunctionality<
-                    Record<string, string>
-                  >
-                | apiCallFactory.MakeAPICallArgsResponseHeaders<
-                    Record<string, unknown>
-                  >
-                | apiCallFactory.MakeAPICallArgsQuery<
-                    THKTEncoded,
-                    Record<string, unknown>
-                  >
-                | apiCallFactory.MakeAPICallArgsBody<THKTEncoded, unknown>
-              ),
-      ): apiCall.APICall<
+      >({
+        method,
+        response,
+        url,
+        ...rest
+      }:
+        | (apiCallFactory.MakeAPICallArgs<
+            TProtocolSpec["method"],
+            TProtocolSpec["responseBody"]
+          > &
+            (
+              | apiCallFactory.MakeAPICallArgsURL
+              | apiCallFactory.MakeAPICallArgsURLData<unknown>
+            )) &
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            (| {}
+              | apiCallFactory.MakeAPICallArgsHeadersData<
+                  Record<string, unknown>
+                >
+              | apiCallFactory.MakeAPICallArgsHeadersFunctionality<
+                  Record<string, string>
+                >
+              | apiCallFactory.MakeAPICallArgsResponseHeaders<
+                  Record<string, unknown>
+                >
+              | apiCallFactory.MakeAPICallArgsQuery<
+                  THKTEncoded,
+                  Record<string, unknown>
+                >
+              | apiCallFactory.MakeAPICallArgsBody<THKTEncoded, unknown>
+            )): apiCall.APICall<
         Partial<
           Record<"method" | "url" | "query" | "body" | "headers", unknown>
         > | void,
@@ -64,12 +61,6 @@ export const createAPICallFactoryGeneric = <
             }
           : TProtocolSpec["responseBody"]
       > => {
-        const validatedMethod = method(methodValue);
-        if (validatedMethod.error !== "none") {
-          throw new Error(
-            `Invalid method: ${JSON.stringify(validatedMethod.errorInfo)}.`,
-          );
-        }
         if ("headersFunctionality" in rest) {
           const missingHeaders = Object.values(
             rest.headersFunctionality,
@@ -128,7 +119,7 @@ export const createAPICallFactoryGeneric = <
           });
           if (validatedArgs.error === "none") {
             const httpArgs: HTTPInvocationArguments = {
-              method: validatedMethod.data,
+              method,
               ...validatedArgs.data,
             };
             if ("headers" in rest) {
