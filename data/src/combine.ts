@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
-import type * as common from "./common";
+import * as validation from "./validation";
 
-// TODO This awkward class will probably be removed when #21 is being worked on.
+/**
+ * This is helper class to combine multiple {@link validation.DataValidator}s into one.
+ * It is frankly quite awkward and not very user-friendly, and will be gone once issue #21 will be worked on.
+ */
 export class ValidationCombiner<
   TRequiredValidators extends Record<
     string,
-    common.DataValidator<any, unknown>
+    validation.DataValidator<any, unknown>
   >,
   TOptionalValidators extends Record<
     string,
-    common.DataValidator<any, unknown> | undefined
+    validation.DataValidator<any, unknown> | undefined
   >,
 > {
   public constructor(
@@ -19,14 +22,14 @@ export class ValidationCombiner<
 
   public withValidator<
     TName extends string,
-    TDataValidator extends common.DataValidator<any, unknown>,
+    TDataValidator extends validation.DataValidator<any, unknown>,
   >(
     name: TName &
       (TName extends keyof (TRequiredValidators | TOptionalValidators)
         ? never
         : {}),
     validator: TDataValidator,
-  ): TDataValidator extends common.DataValidator<any, unknown, unknown>
+  ): TDataValidator extends validation.DataValidator<any, unknown, unknown>
     ? ValidationCombiner<
         {
           [P in
@@ -40,14 +43,14 @@ export class ValidationCombiner<
     : never;
   public withValidator<
     TName extends string,
-    TDataValidator extends common.DataValidator<any, unknown>,
+    TDataValidator extends validation.DataValidator<any, unknown>,
   >(
     name: TName &
       (TName extends keyof (TRequiredValidators | TOptionalValidators)
         ? never
         : {}),
     validator: TDataValidator | undefined,
-  ): TDataValidator extends common.DataValidator<any, unknown, unknown>
+  ): TDataValidator extends validation.DataValidator<any, unknown, unknown>
     ? ValidationCombiner<
         TRequiredValidators,
         {
@@ -62,11 +65,11 @@ export class ValidationCombiner<
 
   public withValidator<
     TName extends string,
-    TDataValidator extends common.DataValidator<any, unknown>,
+    TDataValidator extends validation.DataValidator<any, unknown>,
   >(
     name: TName & (TName extends keyof TRequiredValidators ? never : {}),
     validator: TDataValidator | undefined,
-  ): TDataValidator extends common.DataValidator<any, unknown, unknown>
+  ): TDataValidator extends validation.DataValidator<any, unknown, unknown>
     ? ValidationCombiner<
         {
           [P in
@@ -89,7 +92,7 @@ export class ValidationCombiner<
           ...this._state,
           [name]: validator,
         })
-      : this) as unknown as TDataValidator extends common.DataValidator<
+      : this) as unknown as TDataValidator extends validation.DataValidator<
       any,
       unknown,
       unknown
@@ -117,11 +120,11 @@ export class ValidationCombiner<
     inputs: GetValidationChainInputs<TRequiredValidators> &
       Partial<GetValidationChainInputs<TOptionalValidators>>,
   ):
-    | common.DataValidatorResultSuccess<
+    | validation.DataValidatorResultSuccess<
         GetValidationChainOutputs<TRequiredValidators & TOptionalValidators>
       >
     | {
-        error: "error";
+        error: validation.DataValidatorResultErrorKind;
         errorInfo: Partial<
           Record<
             keyof (TRequiredValidators | TOptionalValidators),
@@ -139,7 +142,7 @@ export class ValidationCombiner<
       >
     > = {};
     for (const [name, validator] of Object.entries(
-      this._state as Record<string, common.DataValidator<unknown, unknown>>,
+      this._state as Record<string, validation.DataValidator<unknown, unknown>>,
     )) {
       if (name in inputs) {
         const validationResult = validator(inputs[name]);
@@ -161,11 +164,11 @@ export class ValidationCombiner<
 
     return Object.keys(errors).length > 0
       ? {
-          error: "error",
+          error: validation.DATA_VALIDATION_RESULT_KIND_ERROR,
           errorInfo: errors,
         }
       : {
-          error: "none",
+          error: validation.DATA_VALIDATION_RESULT_KIND_SUCCESS,
           data: outputs,
         };
   }
@@ -176,7 +179,7 @@ export const newCombiner = (): ValidationCombiner<{}, {}> =>
 
 const isSuccessResult = (
   val: unknown,
-): val is common.DataValidatorResultSuccess<unknown> =>
+): val is validation.DataValidatorResultSuccess<unknown> =>
   !!val &&
   typeof val === "object" &&
   "error" in val &&
@@ -185,7 +188,7 @@ const isSuccessResult = (
   (val as any).error === "none";
 
 export type GetValidationChainInputs<TValidators> = {
-  [P in keyof TValidators]: TValidators[P] extends common.DataValidator<
+  [P in keyof TValidators]: TValidators[P] extends validation.DataValidator<
     infer TInput,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     infer _,
@@ -197,7 +200,7 @@ export type GetValidationChainInputs<TValidators> = {
 };
 
 export type GetValidationChainOutputs<TValidators> = {
-  [P in keyof TValidators]: TValidators[P] extends common.DataValidator<
+  [P in keyof TValidators]: TValidators[P] extends validation.DataValidator<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     infer _,
     infer TOutput,
@@ -214,5 +217,5 @@ export type ValidationChainError =
     }
   | {
       error: "validator-error";
-      errorInfo: common.DataValidatorResultError;
+      errorInfo: validation.DataValidatorResultError;
     };

@@ -62,7 +62,7 @@ export interface DataValidatorResponseOutputSpec<
 export type DataValidatorResponseOutput<TOutput> = data.DataValidator<
   TOutput,
   DataValidatorResponseOutputSuccess,
-  data.DataValidatorResultError | errors.HTTPProtocolError
+  DataValidatorResponseOutputError
 >;
 
 export type DataValidatorResponseOutputError =

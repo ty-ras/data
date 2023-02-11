@@ -1,6 +1,6 @@
 import test from "ava";
 import * as spec from "../utils";
-import type * as common from "../common";
+import type * as common from "../validation";
 
 test("Test transitiveDataValidation works", (t) => {
   t.plan(3);
