@@ -1,3 +1,8 @@
+/**
+ * @file This file contains utility class to combine multiple validators.
+ * Notice!!! The utility class will at some point be deleted.
+ */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 import * as validation from "./validation";
@@ -148,17 +153,17 @@ export class ValidationCombiner<
         const validationResult = validator(inputs[name]);
         if (isSuccessResult(validationResult)) {
           outputs[name as keyof typeof outputs] =
-            validationResult.data as typeof outputs[keyof typeof outputs];
+            validationResult.data as (typeof outputs)[keyof typeof outputs];
         } else {
           errors[name as keyof typeof errors] = {
             error: "validator-error",
             errorInfo: validationResult,
-          } as typeof errors[keyof typeof errors];
+          } as (typeof errors)[keyof typeof errors];
         }
       } else {
         errors[name as keyof typeof errors] = {
           error: "missing-validator",
-        } as typeof errors[keyof typeof errors];
+        } as (typeof errors)[keyof typeof errors];
       }
     }
 

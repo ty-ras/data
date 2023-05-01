@@ -1,7 +1,6 @@
 /**
  * Type describing various string values in HTTP queries or headers.
  * The values are assumed to be parsed from raw HTTP request/response, and multiple header/query name values to be transformed from `string` to `Array<string>`.
- *
  * @see HeaderValue
  * @see QueryValue
  * @see ReadonlyStringValue
@@ -24,7 +23,6 @@ export type QueryValue = StringValue;
  * Type describing various string values in HTTP queries or headers.
  * The values are assumed to be parsed from raw HTTP request/response, and multiple header/query name values to be transformed from `string` to `ReadonlyArray<string>`.
  * This value is designed to be used in readonly context.
- *
  * @see ReadonlyHeaderValue
  * @see ReadonlyQueryValue
  * @see StringValue

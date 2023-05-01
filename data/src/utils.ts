@@ -62,7 +62,6 @@ export const exceptionAsValidationError = (
 /**
  * Helper method to invoke `Object.fromEntries(Object.entries(record).map(([key, value]) => [key, transform(value, key)]))`.
  * The benefit of using this method compared to the raw approach is, besides brevity, the ability to retain the key type of given record into the result type returned by this function.
- *
  * @param record The record to read entries from.
  * @param transform The callback to transform single entry from `record`. The first parameter will be the value, and the second parameter will be the key.
  * @returns A new object which has all the same properties as given `record`, but values are transformed using given `transform` callback.

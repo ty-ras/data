@@ -23,7 +23,6 @@ export type HttpMethodWithBody = Exclude<HttpMethod, HttpMethodWithoutBody>;
 
 /**
  * Checks whether given HTTP method is without request body.
- *
  * @param method The HTTP method, one of type {@link HttpMethod}.
  * @returns `true` is method is `"TRACE"`, `"GET"`, `"OPTIONS"`, or `"HEAD"`.
  */

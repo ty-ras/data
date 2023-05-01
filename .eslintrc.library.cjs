@@ -6,11 +6,12 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:jsdoc/recommended-typescript-error",
     // See https://github.com/prettier/eslint-config-prettier/blob/main/CHANGELOG.md#version-800-2021-02-21
     "plugin:prettier/recommended",
     "plugin:sonarjs/recommended"
   ],
-  plugins: ["prettier"],
+  plugins: ["jsdoc", "prettier"],
   parser: "@typescript-eslint/parser",
   env: {
     node: true,
@@ -32,6 +33,30 @@ module.exports = {
     "no-useless-return": "error",
     "no-console": "error",
     "sonarjs/no-nested-template-literals": "off", // Nested template literals are OK really
+    "jsdoc/require-file-overview": "error",
+    "jsdoc/require-jsdoc": [
+      "error",
+      {
+        "publicOnly": true,
+        "require": {
+          "ArrowFunctionExpression": true,
+          "ClassDeclaration": true,
+          "ClassExpression": true,
+          "FunctionDeclaration": true,
+          "FunctionExpression": true,
+          "MethodDefinition": true
+        },
+        "exemptEmptyConstructors": true,
+        "exemptEmptyFunctions": false,
+        "enableFixer": false,
+        "contexts": [
+          "TSInterfaceDeclaration",
+          "TSTypeAliasDeclaration",
+          "TSMethodSignature",
+          "TSPropertySignature"
+        ]
+      }
+    ]
   },
   settings: {
     "import/resolver": {

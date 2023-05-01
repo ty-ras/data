@@ -1,4 +1,8 @@
 /**
+ * @file This file contains types and constants related to validating data as input.
+ */
+
+/**
  * This is callback type which is the bases of many TyRAS operations.
  * It takes input, and produces either {@link DataValidatorResultSuccess} or an error.
  * The error is by default {@link DataValidatorResultError}, but can be customized as last generic parameter to this type.
