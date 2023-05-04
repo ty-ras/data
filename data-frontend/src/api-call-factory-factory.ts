@@ -10,7 +10,7 @@ export const createAPICallFactoryGeneric = <
 ): {
   withHeaders: <THeaders extends Record<string, HeaderProvider>>(
     headers: THeaders,
-  ) => apiCallFactory.APICallFactory<THKTEncoded, keyof THeaders & string>;
+  ) => apiCallFactory.APICallFactoryBase<THKTEncoded, keyof THeaders & string>;
 } => {
   return {
     // TODO: Fix this overly complex function
@@ -107,7 +107,7 @@ export const createAPICallFactoryGeneric = <
           .withValidator("body", "body" in rest ? rest.body : undefined);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return (async (
-          args: void | protocol.GetRuntimeObject<
+          args: void | protocol.RuntimeOf<
             Partial<
               Record<"method" | "url" | "query" | "body" | "headers", unknown>
             >

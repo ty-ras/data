@@ -3,7 +3,7 @@ import type * as protocol from "@ty-ras/protocol";
 import type * as data from "@ty-ras/data";
 import type * as apiCall from "./api-call";
 
-export interface APICallFactory<
+export interface APICallFactoryBase<
   THKTEncoded extends protocol.HKTEncodedBase,
   THeaders extends string,
 > {
