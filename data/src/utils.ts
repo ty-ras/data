@@ -1,3 +1,6 @@
+/**
+ * @file This file contains utility functions related to data validation types, and also in general.
+ */
 import * as validation from "./validation";
 
 /**

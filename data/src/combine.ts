@@ -21,10 +21,21 @@ export class ValidationCombiner<
     validation.DataValidator<any, unknown> | undefined
   >,
 > {
+  /**
+   * Creates a new instance of {@link ValidationCombiner}.
+   * Should not be used by client libraries directly, use {@link newCombiner} function instead.
+   * @param _state the state that this object should have.
+   */
   public constructor(
     private readonly _state: TRequiredValidators & TOptionalValidators,
   ) {}
 
+  /**
+   * Adds new named validator to a group of validators this object represents.
+   * This overload is for validators which are deemed to be required.
+   * @param name The name of the validator.
+   * @param validator The implementation of the validator.
+   */
   public withValidator<
     TName extends string,
     TDataValidator extends validation.DataValidator<any, unknown>,
@@ -46,6 +57,13 @@ export class ValidationCombiner<
         TOptionalValidators
       >
     : never;
+
+  /**
+   * Adds new named validator to a group of validators this object represents.
+   * This overload is for validators which are deemed to be optional.
+   * @param name The name of the validator.
+   * @param validator The implementation of the validator.
+   */
   public withValidator<
     TName extends string,
     TDataValidator extends validation.DataValidator<any, unknown>,
@@ -68,6 +86,13 @@ export class ValidationCombiner<
       >
     : never;
 
+  /**
+   * Adds new named validator to a group of validators this object represents.
+   * The validator is deemed to be optional if it is `undefined`.
+   * @param name The name of the validator.
+   * @param validator The implementation of the validator.
+   * @returns new instance of {@link ValidationCombiner} with all the validators that current object has, and also the specified new validator
+   */
   public withValidator<
     TName extends string,
     TDataValidator extends validation.DataValidator<any, unknown>,
@@ -121,6 +146,11 @@ export class ValidationCombiner<
       : never;
   }
 
+  /**
+   * Invokes named validators for named inputs, either succeeding for all of the given inputs, or failing with one or more errors.
+   * @param inputs The inputs, each named input for the each named validator that this object contains.
+   * @returns The record of {@link validation.DataValidatorResultSuccess}s, or a {@link validation.DataValidatorResultError} if there are errors.
+   */
   public getOutputs(
     inputs: GetValidationChainInputs<TRequiredValidators> &
       Partial<GetValidationChainInputs<TOptionalValidators>>,
@@ -179,6 +209,10 @@ export class ValidationCombiner<
   }
 }
 
+/**
+ * Helper method to avoid calling {@link ValidationCombiner} directly and thus needing to specify generic arguments explicitly.
+ * @returns A new instance of {@link ValidationCombiner}.
+ */
 export const newCombiner = (): ValidationCombiner<{}, {}> =>
   new ValidationCombiner({});
 
@@ -192,6 +226,9 @@ const isSuccessResult = (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   (val as any).error === "none";
 
+/**
+ * Helper type to extract inputs (`TInput` generic argument) of record of {@link validation.DataValidator}s.
+ */
 export type GetValidationChainInputs<TValidators> = {
   [P in keyof TValidators]: TValidators[P] extends validation.DataValidator<
     infer TInput,
@@ -204,6 +241,9 @@ export type GetValidationChainInputs<TValidators> = {
     : never;
 };
 
+/**
+ * Helper type to extract outputs (`TOutput` generic argument) of record of {@link validation.DataValidator}s.
+ */
 export type GetValidationChainOutputs<TValidators> = {
   [P in keyof TValidators]: TValidators[P] extends validation.DataValidator<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -216,6 +256,9 @@ export type GetValidationChainOutputs<TValidators> = {
     : never;
 };
 
+/**
+ * This type describes a single error related to input given to `getOutputs` method of {@link ValidationCombiner}.
+ */
 export type ValidationChainError =
   | {
       error: "missing-validator";

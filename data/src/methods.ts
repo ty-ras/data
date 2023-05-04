@@ -1,4 +1,8 @@
 /**
+ * @file This file contains types and constants related to HTTP protocol methods.
+ */
+
+/**
  * String constant type for HTTP methods.
  */
 export type HttpMethod =

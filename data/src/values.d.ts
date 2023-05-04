@@ -1,4 +1,8 @@
 /**
+ * @file This type-only file contains types related to values of HTTP headers and query structure.
+ */
+
+/**
  * Type describing various string values in HTTP queries or headers.
  * The values are assumed to be parsed from raw HTTP request/response, and multiple header/query name values to be transformed from `string` to `Array<string>`.
  * @see HeaderValue
