@@ -36,7 +36,7 @@
     "typescript": "5.0.4"
   },
   "scripts": {
-    "build:run": "yarn run lint && yarn run tsc",
+    "build:run": "yarn run tsc",
     "build:ci": "yarn run clear-build-artifacts && yarn run build:run",
     "clear-build-artifacts": "rm -rf dist build",
     "lint": "eslint ./src --ext .ts,.tsx",
