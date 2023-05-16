@@ -1,3 +1,7 @@
+/**
+ * @file This is entrypoint file for this package, exporting all non-internal files.
+ */
+
 export type * from "./state";
 export type * from "./url";
 export type * from "./headers";
