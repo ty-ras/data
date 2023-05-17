@@ -5,6 +5,12 @@
 
 /**
  * This interface specifies the mandatory properties of HTTP endpoint type.
+ * @see ProtocolSpecHeaderFunctionality
+ * @see ProtocolSpecURL
+ * @see ProtocolSpecQuery
+ * @see ProtocolSpecHeaderData
+ * @see ProtocolSpecRequestBody
+ * @see ProtocolSpecResponseHeaders
  */
 export interface ProtocolSpecCore<TMethod extends string, TOutput> {
   /**

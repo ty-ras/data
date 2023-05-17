@@ -1,3 +1,6 @@
+/**
+ * @file This file contains unit tests for code in `../utils.ts`.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import test, { ExecutionContext } from "ava";
