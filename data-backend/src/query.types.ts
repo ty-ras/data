@@ -1,8 +1,8 @@
 /**
- * @file This file contains types related to query data validation.
+ * @file This types-only file contains types related to query data validation.
  */
 import type * as data from "@ty-ras/data";
-import type * as s from "./string";
+import type * as s from "./string.types";
 
 /**
  * This type specifies the shape for query data validation: the validator for each query parameter name, and metadata associated with them.

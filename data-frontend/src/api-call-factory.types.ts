@@ -1,10 +1,10 @@
 /**
- * @file This file contains types related to creating {@link apiCall.APICall} objects.
+ * @file This types-only file contains types related to creating {@link apiCall.APICall} objects.
  */
 /* eslint-disable @typescript-eslint/ban-types */
 import type * as protocol from "@ty-ras/protocol";
 import type * as data from "@ty-ras/data";
-import type * as apiCall from "./api-call";
+import type * as apiCall from "./api-call.types";
 
 /**
  * This is base type for types creating {@link apiCall.APICall}s.

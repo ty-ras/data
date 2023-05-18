@@ -1,7 +1,7 @@
 /**
  * @file This file contains utility method to convert {@link apiCall.APICallResultError} to {@link Error}.
  */
-import type * as apiCall from "./api-call";
+import type * as apiCall from "./api-call.types";
 
 /**
  * Converts given {@link Error} or {@link apiCall.APICallResultError} to {@link Error}.

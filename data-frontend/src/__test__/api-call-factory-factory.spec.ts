@@ -6,8 +6,8 @@ import test, { ExecutionContext } from "ava";
 import type * as data from "@ty-ras/data";
 import { isDeepStrictEqual } from "util";
 import * as spec from "../api-call-factory-factory";
-import type * as factory from "../api-call-factory";
-import type * as apiCall from "../api-call";
+import type * as factory from "../api-call-factory.types";
+import type * as apiCall from "../api-call.types";
 import * as protocol from "@ty-ras/protocol";
 
 test("API Call Factory Factory works", async (t) => {

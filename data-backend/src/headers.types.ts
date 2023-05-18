@@ -1,8 +1,8 @@
 /**
- * @file This file contains types related to HTTP headers: request header functionality, request header data, and response header data.
+ * @file This types-only file contains types related to HTTP headers: request header functionality, request header data, and response header data.
  */
 import type * as data from "@ty-ras/data";
-import type * as s from "./string";
+import type * as s from "./string.types";
 
 /**
  * This type specifies the shape for request header data validation: the validator for each header name, and metadata associated with them.

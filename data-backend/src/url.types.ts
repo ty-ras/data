@@ -1,7 +1,7 @@
 /**
- * @file This file contains types related to validating parameters encoded in URL path string.
+ * @file This types-only file contains types related to validating parameters encoded in URL path string.
  */
-import type * as s from "./string";
+import type * as s from "./string.types";
 
 /**
  * This type specifies the shape for validating parameters encoded in URL path string.: the validator for path parameter name, and metadata associated with them.

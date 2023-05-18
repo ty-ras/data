@@ -1,5 +1,5 @@
 /**
- * @file This file contains types related to calling one HTTP endpoint.
+ * @file This types-only file contains types related to calling one HTTP endpoint.
  */
 /* eslint-disable @typescript-eslint/ban-types */
 import type * as protocol from "@ty-ras/protocol";

@@ -3,8 +3,8 @@
  */
 import type * as protocol from "@ty-ras/protocol";
 import * as data from "@ty-ras/data";
-import type * as apiCall from "./api-call";
-import type * as apiCallFactory from "./api-call-factory";
+import type * as apiCall from "./api-call.types";
+import type * as apiCallFactory from "./api-call-factory.types";
 
 /**
  * Function to create objects which can create {@link apiCall.APICallFactoryBase} callbacks.

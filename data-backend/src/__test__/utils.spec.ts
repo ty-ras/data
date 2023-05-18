@@ -7,7 +7,7 @@ import test, { ExecutionContext } from "ava";
 import * as spec from "../utils";
 import * as common from "./common";
 import type * as data from "@ty-ras/data";
-import type * as s from "../string";
+import type * as s from "../string.types";
 
 test("Test default parameter regexp", (t) => {
   t.deepEqual(spec.defaultParameterRegExp(), /[^/]+/);

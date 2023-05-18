@@ -1,5 +1,5 @@
 /**
- * @file This file contains types related to textual data validation (header or query parameters).
+ * @file This types-only file contains types related to textual data validation (header or query parameters).
  */
 import type * as data from "@ty-ras/data";
 
