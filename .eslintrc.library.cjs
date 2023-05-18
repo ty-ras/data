@@ -7,16 +7,18 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:jsdoc/recommended-typescript-error",
-    // See https://github.com/prettier/eslint-config-prettier/blob/main/CHANGELOG.md#version-800-2021-02-21
     "plugin:prettier/recommended",
     "plugin:sonarjs/recommended"
   ],
-  plugins: ["jsdoc", "prettier"],
+  plugins: [
+    "jsdoc",
+    "prettier"
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "./tsconfig.json",
     sourceType: "module",
-    ecmaVersion: 2020,
+    ecmaVersion: "latest",
     tsconfigRootDir: __dirname,
   },
   rules: {
@@ -53,13 +55,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  settings: {
-    "import/resolver": {
-      node: {
-        paths: ["src"],
-        extensions: [".ts"] // Add .tsx, .js, .jsx if needed
-      }
-    }
   }
 };

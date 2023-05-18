@@ -2,29 +2,45 @@
 module.exports = {
   root: true,
   extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    // See https://github.com/prettier/eslint-config-prettier/blob/main/CHANGELOG.md#version-800-2021-02-21
+    "plugin:jsdoc/recommended-typescript-error",
     "plugin:prettier/recommended",
   ],
-  plugins: ["prettier"],
+  plugins: [
+    "jsdoc",
+    "prettier"
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "./tsconfig.out.json",
     sourceType: "module",
-    ecmaVersion: 2020,
+    ecmaVersion: "latest",
     tsconfigRootDir: __dirname,
   },
   rules: {
     "prettier/prettier": "error",
-  },
-  settings: {
-    "import/resolver": {
-      node: {
-        paths: ["dist-ts"],
-        extensions: [".ts"] // Add .tsx, .js, .jsx if needed
+    "jsdoc/require-file-overview": "error",
+    "jsdoc/require-jsdoc": [
+      "error",
+      {
+        "publicOnly": true,
+        "require": {
+          "ArrowFunctionExpression": true,
+          "ClassDeclaration": true,
+          "ClassExpression": true,
+          "FunctionDeclaration": true,
+          "FunctionExpression": true,
+          "MethodDefinition": true
+        },
+        "exemptEmptyConstructors": true,
+        "exemptEmptyFunctions": false,
+        "enableFixer": false,
+        "contexts": [
+          "TSInterfaceDeclaration",
+          "TSTypeAliasDeclaration",
+          "TSMethodSignature",
+          "TSPropertySignature"
+        ]
       }
-    }
+    ]
   }
 };
