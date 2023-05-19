@@ -1,6 +1,7 @@
 /**
  * @file This file contains method to create {@link apiCallFactory.APICallFactoryBase} instances.
  */
+
 import type * as protocol from "@ty-ras/protocol";
 import * as data from "@ty-ras/data";
 import type * as apiCall from "./api-call.types";

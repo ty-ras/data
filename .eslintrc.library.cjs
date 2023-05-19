@@ -6,11 +6,13 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:type-only-import/recommended",
     "plugin:jsdoc/recommended-typescript-error",
     "plugin:prettier/recommended",
     "plugin:sonarjs/recommended"
   ],
   plugins: [
+    "type-only-import",
     "jsdoc",
     "prettier"
   ],

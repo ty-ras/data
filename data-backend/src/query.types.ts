@@ -1,6 +1,7 @@
 /**
  * @file This types-only file contains types related to query data validation.
  */
+
 import type * as data from "@ty-ras/data";
 import type * as s from "./string.types";
 

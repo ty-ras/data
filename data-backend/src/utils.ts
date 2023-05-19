@@ -1,6 +1,7 @@
 /**
  * @file This file contains generic utilities related to HTTP headers and URL parameter RegExps.
  */
+
 import type * as data from "@ty-ras/data";
 import type * as h from "./headers.types";
 

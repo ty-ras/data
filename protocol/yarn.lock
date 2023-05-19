@@ -761,6 +761,11 @@ eslint-plugin-sonarjs@0.19.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-sonarjs/-/eslint-plugin-sonarjs-0.19.0.tgz#6654bc1c6d24c2183891b8bfe1175004dbba1e3c"
   integrity sha512-6+s5oNk5TFtVlbRxqZN7FIGmjdPCYQKaTzFPmqieCmsU1kBYDzndTeQav0xtQNwZJWu5awWfTGe8Srq9xFOGnw==
 
+eslint-plugin-type-only-import@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-type-only-import/-/eslint-plugin-type-only-import-0.9.0.tgz#cfb6ae6b57d4b376c702a664e83bc836383ea83f"
+  integrity sha512-FeidbzaXEi5g1/s6i+y+G3eVtK2GlTenNwAB7lwfPAndyad6toK8Db6RtP6JsWtPhYJfLYdymC2jvBAJhNStRA==
+
 eslint-scope@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"

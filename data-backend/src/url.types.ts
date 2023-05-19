@@ -1,6 +1,7 @@
 /**
  * @file This types-only file contains types related to validating parameters encoded in URL path string.
  */
+
 import type * as s from "./string.types";
 
 /**

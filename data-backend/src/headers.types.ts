@@ -1,6 +1,7 @@
 /**
  * @file This types-only file contains types related to HTTP headers: request header functionality, request header data, and response header data.
  */
+
 import type * as data from "@ty-ras/data";
 import type * as s from "./string.types";
 
