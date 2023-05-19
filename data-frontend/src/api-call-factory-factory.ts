@@ -47,7 +47,7 @@ export const createAPICallFactoryGeneric = <
               | apiCallFactory.MakeAPICallArgsHeadersData<
                   Record<string, unknown>
                 >
-              | apiCallFactory.MakeAPICallArgsHeadersFunctionality<
+              | apiCallFactory.MakeAPICallArgsHeaderFunctionality<
                   Record<string, string>
                 >
               | apiCallFactory.MakeAPICallArgsResponseHeaders<
@@ -71,10 +71,10 @@ export const createAPICallFactoryGeneric = <
             }
           : TProtocolSpec["responseBody"]
       > => {
-        if ("headersFunctionality" in rest) {
-          const missingHeaders = Object.values(
-            rest.headersFunctionality,
-          ).filter((headerFunctionality) => !(headerFunctionality in headers));
+        if ("headerFunctionality" in rest) {
+          const missingHeaders = Object.values(rest.headerFunctionality).filter(
+            (functionality) => !(functionality in headers),
+          );
           if (missingHeaders.length > 0) {
             throw new Error(
               `The endpoint requires the following header functionality, missing from given header functionality: ${missingHeaders.join(
@@ -135,12 +135,12 @@ export const createAPICallFactoryGeneric = <
             if ("headers" in rest) {
               httpArgs.headers = validatedArgs.data.headers;
             }
-            if ("headersFunctionality" in rest) {
+            if ("headerFunctionality" in rest) {
               httpArgs.headers = Object.assign(
                 httpArgs.headers ?? {},
                 Object.fromEntries(
                   await Promise.all(
-                    Object.entries(rest.headersFunctionality).map(
+                    Object.entries(rest.headerFunctionality).map(
                       async ([headerName, headerFunctionalityID]) =>
                         [
                           headerName,
@@ -195,7 +195,7 @@ export const createAPICallFactoryGeneric = <
  * This signature is for callbacks which should provide the values for the HTTP request header, which is not data- but functionality-related (e.g. authentication).
  */
 export type HeaderProvider = (
-  args: Omit<HTTPInvocationArguments, "headersFunctionality"> & {
+  args: Omit<HTTPInvocationArguments, "headerFunctionality"> & {
     headerName: string;
   },
 ) => string | PromiseLike<string>;
