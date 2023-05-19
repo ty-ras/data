@@ -36,7 +36,7 @@ test("API Call Factory Factory works", async (t) => {
         response: validatorForValue({
           protocol: "APIEndpointWithHeaderFunctionality",
         }),
-        headersFunctionality: {
+        headerFunctionality: {
           Authorization: "auth",
         },
       })(),
@@ -135,7 +135,7 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
           response: validatorForValue({
             protocol: "APIEndpointWithHeaderFunctionality",
           }),
-          headersFunctionality: {
+          headerFunctionality: {
             Authorization: "auth_typoed" as any,
           },
         }),
@@ -189,7 +189,7 @@ type APIEndpoint = APIEndpointCore & {
 
 type APIEndpointWithHeaderFunctionality = APIEndpointCore & {
   responseBody: { protocol: "APIEndpointWithHeaderFunctionality" };
-  headers: {
+  headerFunctionality: {
     Authorization: "auth";
   };
 };

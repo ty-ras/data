@@ -37,10 +37,12 @@ export interface APICallFactoryBase<
       (TProtocolSpec extends protocol.ProtocolSpecRequestBody<infer TBodyData>
         ? MakeAPICallArgsBody<THKTEncoded, TBodyData>
         : {}) &
-      (TProtocolSpec extends protocol.ProtocolSpecHeaders<
+      (TProtocolSpec extends protocol.ProtocolSpecHeaderFunctionality<
         Record<string, THeaders>
       >
-        ? MakeAPICallArgsHeadersFunctionality<TProtocolSpec["headers"]>
+        ? MakeAPICallArgsHeaderFunctionality<
+            TProtocolSpec["headerFunctionality"]
+          >
         : {}) &
       (TProtocolSpec extends protocol.ProtocolSpecResponseHeaders<
         infer TResponseHeaders
@@ -68,14 +70,14 @@ export interface MakeAPICallArgs<TMethod, TResponse> {
  * This is helper type to create type with given request header _functionality_ (e.g. authentication based on `Authorization` request header value).
  * This is different thing than request header _data_ validation, for that see {@link MakeAPICallArgsHeadersData}.
  */
-export interface MakeAPICallArgsHeadersFunctionality<
+export interface MakeAPICallArgsHeaderFunctionality<
   THeaders extends Record<string, string>,
 > {
   /**
    * The dictionary, where key is the request header name, and value is the name of the functionality to use, if the header is present in the HTTP request.
    * For example, a key could be `Authorization` and value `auth`.
    */
-  headersFunctionality: THeaders;
+  headerFunctionality: THeaders;
 }
 
 /**
