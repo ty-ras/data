@@ -1,6 +1,18 @@
-import type * as data from "@ty-ras/data";
-import type * as h from "./headers";
+/**
+ * @file This file contains generic utilities related to HTTP headers and URL parameter RegExps.
+ */
 
+import type * as data from "@ty-ras/data";
+import type * as h from "./headers.types";
+
+/**
+ * This is callback to check for request or response headers against validators.
+ * It is meant to be used by other TyRAS components, and not by client code directly.
+ * @param headersValidation The validators for the header data.
+ * @param getHeaderValue The callback to get the values for the validators.
+ * @param lowercaseHeaderName Should the header names be lower-cased before passing them to `getHeaderValue` callback.
+ * @returns The tuple describing: whether the headers passed validation, the possibly validated headers if so, and any errors.
+ */
 export const checkHeaders = <
   THeaderData extends h.RuntimeAnyHeaders,
   IsDecoder extends boolean,
@@ -53,4 +65,9 @@ export const checkHeaders = <
 };
 
 const DEFAULT_PARAM_REGEXP = /[^/]+/;
+/**
+ * This helper callback creates new {@link RegExp} which has the default pattern to match parameters encoded in URL path string.
+ * The pattern is `[^/]+`, so as many consecutive characters as possible until encountering first `/`.
+ * @returns A new RegExp with the default pattern to match parameters encoded in URL path string.
+ */
 export const defaultParameterRegExp = () => new RegExp(DEFAULT_PARAM_REGEXP);

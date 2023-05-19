@@ -1,8 +1,18 @@
+/**
+ * @file This file contains method to create {@link apiCallFactory.APICallFactoryBase} instances.
+ */
+
 import type * as protocol from "@ty-ras/protocol";
 import * as data from "@ty-ras/data";
-import type * as apiCall from "./api-call";
-import type * as apiCallFactory from "./api-call-factory";
+import type * as apiCall from "./api-call.types";
+import type * as apiCallFactory from "./api-call-factory.types";
 
+/**
+ * Function to create objects which can create {@link apiCall.APICallFactoryBase} callbacks.
+ * This function is meant to be used by other TyRAS libraries, and not directly by client code.
+ * @param callHttpEndpoint The callback to perform sending HTTP request and receiving HTTP response.
+ * @returns An object with `withHeaders` function, which will then return the {@link apiCall.APICallFactoryBase} callbacks.
+ */
 export const createAPICallFactoryGeneric = <
   THKTEncoded extends protocol.HKTEncodedBase,
 >(
@@ -10,7 +20,7 @@ export const createAPICallFactoryGeneric = <
 ): {
   withHeaders: <THeaders extends Record<string, HeaderProvider>>(
     headers: THeaders,
-  ) => apiCallFactory.APICallFactory<THKTEncoded, keyof THeaders & string>;
+  ) => apiCallFactory.APICallFactoryBase<THKTEncoded, keyof THeaders & string>;
 } => {
   return {
     // TODO: Fix this overly complex function
@@ -107,7 +117,7 @@ export const createAPICallFactoryGeneric = <
           .withValidator("body", "body" in rest ? rest.body : undefined);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return (async (
-          args: void | protocol.GetRuntimeObject<
+          args: void | protocol.RuntimeOf<
             Partial<
               Record<"method" | "url" | "query" | "body" | "headers", unknown>
             >
@@ -181,26 +191,59 @@ export const createAPICallFactoryGeneric = <
   };
 };
 
+/**
+ * This signature is for callbacks which should provide the values for the HTTP request header, which is not data- but functionality-related (e.g. authentication).
+ */
 export type HeaderProvider = (
   args: Omit<HTTPInvocationArguments, "headersFunctionality"> & {
     headerName: string;
   },
 ) => string | PromiseLike<string>;
 
+/**
+ * This signature is for callbacks which should send HTTP request and return HTTP response.
+ */
 export type CallHTTPEndpoint = (
   args: HTTPInvocationArguments,
 ) => Promise<HTTPInvocationResult>;
 
+/**
+ * This data type contains all information needed to send HTTP request.
+ */
 export interface HTTPInvocationArguments {
+  /**
+   * The HTTP method to use in the request.
+   */
   method: string;
+  /**
+   * The URL path to use in the request.
+   */
   url: string;
+  /**
+   * The query parameters to use in the request.
+   */
   query?: Record<string, unknown>;
+  /**
+   * The body to use in the request.
+   */
   body?: unknown;
+  /**
+   * The headers to use in the request.
+   */
   headers?: Record<string, unknown>;
 }
 
+/**
+ * This data type contains all information about the HTTP response before data validators start to process it.
+ */
 export type HTTPInvocationResult = {
+  /**
+   * The HTTP response body.
+   */
   body: unknown;
+  /**
+   * The HTTP response headers.
+   */
   headers?: Record<string, data.HeaderValue>;
 };
 

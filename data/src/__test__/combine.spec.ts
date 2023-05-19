@@ -1,6 +1,9 @@
+/**
+ * @file This file contains tests for combine.ts file in parent folder.
+ */
 import test from "ava";
 import * as spec from "../combine";
-import type * as common from "../common";
+import type * as common from "../validation";
 
 test("ValidationCombiner required part works", (t) => {
   t.plan(2);

@@ -1,3 +1,6 @@
+/**
+ * @file This file contains tests for methods.ts file in parent folder.
+ */
 import test from "ava";
 import * as spec from "../methods";
 
