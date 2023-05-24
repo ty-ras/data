@@ -403,7 +403,7 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
-"@ty-ras/data@1.0.0":
+"@ty-ras/data@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@ty-ras/data/-/data-1.0.0.tgz#d49c7ccba3e26463d05470ff10bb947f8f3293d7"
   integrity sha512-WjiVqThVwVX6NpkU3sweiG1I2b6hiIt4VuvbSGWwniAXBJVZg6AFrndOtCgf6MQmmgS/LqOtmT1xbeF/Gk1Ayg==
