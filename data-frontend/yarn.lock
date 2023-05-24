@@ -403,15 +403,15 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
-"@ty-ras/data@1.0.0":
+"@ty-ras/data@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@ty-ras/data/-/data-1.0.0.tgz#d49c7ccba3e26463d05470ff10bb947f8f3293d7"
   integrity sha512-WjiVqThVwVX6NpkU3sweiG1I2b6hiIt4VuvbSGWwniAXBJVZg6AFrndOtCgf6MQmmgS/LqOtmT1xbeF/Gk1Ayg==
 
-"@ty-ras/protocol@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ty-ras/protocol/-/protocol-1.0.0.tgz#b2a88c7b858e4a3223d2045bf19c4f4b46a8b4df"
-  integrity sha512-w1ZC8oRGTtH6WD0EWsup9umjXgeGCpxd9uth7LIfyt25YZGDsPR43BsHRm7yjZNjVEaKGwFkNkaE5bpz3iwPTQ==
+"@ty-ras/protocol@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@ty-ras/protocol/-/protocol-1.0.1.tgz#67a42c62df00b51566e2bfd8615e84518717d7fd"
+  integrity sha512-ivkK4s1+hHn72LAd+JSsKGzVwdPHYwUSYbdUzFVyY1ZQ5rk+iPEeP4KkQg8XHWqD/f+rEsYsHxmdynb1rXg2nw==
 
 "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.4"
