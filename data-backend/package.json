@@ -1,6 +1,6 @@
 {
   "name": "@ty-ras/data-backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Stanislav Muhametsin",
     "email": "346799+stazz@users.noreply.github.com",
@@ -31,7 +31,7 @@
     }
   },
   "dependencies": {
-    "@ty-ras/data": "1.0.0"
+    "@ty-ras/data": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.21.5",
