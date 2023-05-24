@@ -39,7 +39,7 @@
   "scripts": {
     "build:run": "yarn run tsc",
     "build:ci": "yarn run clear-build-artifacts && yarn run build:run",
-    "clear-build-artifacts": "rm -rf dist build",
+    "clear-build-artifacts": "rm -rf build",
     "lint": "eslint ./src --ext .ts,.tsx",
     "tsc": "tsc --project tsconfig.build.json",
     "test:coverage": "c8 --temp-directory /tmp ava",
