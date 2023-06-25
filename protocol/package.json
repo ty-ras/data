@@ -66,5 +66,8 @@
     "tsc:plain": "tsc",
     "test:coverage": "c8 --temp-directory /tmp ava",
     "test:run": "c8 --temp-directory /tmp --reporter text ava"
+  },
+  "resolutions": {
+    "dependency-tree": "10.0.9"
   }
 }

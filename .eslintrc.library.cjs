@@ -6,12 +6,15 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:type-only-import/recommended",
     "plugin:jsdoc/recommended-typescript-error",
     "plugin:prettier/recommended",
     "plugin:sonarjs/recommended"
   ],
   plugins: [
+    "import",
     "type-only-import",
     "jsdoc",
     "prettier"
@@ -57,5 +60,11 @@ module.exports = {
         ]
       }
     ]
+  },
+  settings: {
+    "import/resolver": {
+      typescript: true,
+      node: true
+    }
   }
 };
