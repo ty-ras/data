@@ -4,7 +4,7 @@
  */
 
 import type * as methods from "./methods";
-import type * as thisShouldError from "./index";
+import type * as thisShouldError from "./";
 
 /**
  * This interface specifies the mandatory properties of HTTP endpoint type.
