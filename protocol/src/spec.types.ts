@@ -4,9 +4,7 @@
  */
 
 import type * as methods from "./methods";
-import * as lel from "./index";
-
-const fak = lel.METHOD_GET;
+import type * as thisShouldError from "./index";
 
 /**
  * This interface specifies the mandatory properties of HTTP endpoint type.
