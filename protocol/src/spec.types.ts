@@ -3,6 +3,11 @@
  * Most of these interfaces need not to be extended/used directly, but they are used by TyRAS libraries in auxiliary types, which deduce HTTP endpoint callback input (URL parameters, query parameters, return type, etc).
  */
 
+import type * as methods from "./methods";
+import * as lel from "./index";
+
+const fak = lel.METHOD_GET;
+
 /**
  * This interface specifies the mandatory properties of HTTP endpoint type.
  * @see ProtocolSpecHeaderFunctionality
@@ -12,7 +17,7 @@
  * @see ProtocolSpecRequestBody
  * @see ProtocolSpecResponseHeaders
  */
-export interface ProtocolSpecCore<TMethod extends string, TOutput> {
+export interface ProtocolSpecCore<TMethod extends methods.HttpMethod, TOutput> {
   /**
    * The HTTP method accepted by the endpoint.
    */
@@ -47,7 +52,7 @@ export interface ProtocolSpecHeaderFunctionality<
  * This interface specifies the optional property of HTTP endpoint type, when it extracts some data from URL path.
  * This data will be passed to the endpoint.
  */
-export interface ProtocolSpecURL<TURLData extends Record<string, unknown>> {
+export interface ProtocolSpecURL<TURLData extends TURLDataBase> {
   /**
    * The URL data specification.
    * Key: URL parameter name.
@@ -60,7 +65,7 @@ export interface ProtocolSpecURL<TURLData extends Record<string, unknown>> {
  * This interface specifies the optional property of HTTP endpoint type, when it extracts some data from URL query.
  * This data will be passed to the endpoint.
  */
-export interface ProtocolSpecQuery<TQueryData extends Record<string, unknown>> {
+export interface ProtocolSpecQuery<TQueryData extends TQueryDataBase> {
   /**
    * The query data specification.
    * Key: Query parameter name.
@@ -74,7 +79,7 @@ export interface ProtocolSpecQuery<TQueryData extends Record<string, unknown>> {
  * This data will be passed to the endpoint.
  */
 export interface ProtocolSpecHeaderData<
-  THeaderData extends Record<string, unknown>,
+  THeaderData extends TRequestHeadersDataBase,
 > {
   /**
    * The HTTP request header data specification.
@@ -100,7 +105,7 @@ export interface ProtocolSpecRequestBody<TInput> {
  * This data will be written to HTTP response headers.
  */
 export interface ProtocolSpecResponseHeaders<
-  THeaderData extends Record<string, unknown>,
+  THeaderData extends TResponseHeadersDataBase,
 > {
   /**
    * The HTTP response header data specification.
@@ -109,3 +114,33 @@ export interface ProtocolSpecResponseHeaders<
    */
   responseHeaders: THeaderData;
 }
+
+/**
+ * This is not "URL database", this is "base for the URL data".
+ * It specifices the constraint for generic argument of {@link ProtocolSpecURL}.
+ */
+export type TURLDataBase = TTextualDataBase;
+
+/**
+ * This is not "query database", this is "base for the query data".
+ * It specifices the constraint for generic argument of {@link ProtocolSpecQuery}.
+ */
+export type TQueryDataBase = TTextualDataBase;
+
+/**
+ * This is not "request headers database", this is "base for the request headers data".
+ * It specifices the constraint for generic argument of {@link ProtocolSpecHeaderData}.
+ */
+export type TRequestHeadersDataBase = TTextualDataBase;
+
+/**
+ * This is not "response headers database", this is "base for the response headers data".
+ * It specifices the constraint for generic argument of {@link ProtocolSpecResponseHeaders}.
+ */
+export type TResponseHeadersDataBase = TTextualDataBase;
+
+/**
+ * This is not "textual database", this is "base for the textual data".
+ * It specifices the constraint for URL, query, request headers, or response headers data.
+ */
+export type TTextualDataBase = Record<string, unknown>;

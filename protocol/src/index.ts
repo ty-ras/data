@@ -4,3 +4,4 @@
 
 export type * from "./spec.types";
 export type * from "./encoding.types";
+export * from "./methods";
