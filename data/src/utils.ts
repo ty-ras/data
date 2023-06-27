@@ -89,3 +89,44 @@ const isSuccess = <T>(
   typeof response === "object" &&
   "error" in response &&
   response.error === validation.DATA_VALIDATION_RESULT_KIND_SUCCESS;
+
+/**
+ * Removes all properties from given object, values of which are `undefined`.
+ * @param val The value to strip `undefined` properties from.
+ * @returns Object without properties, values of which were `undefined`.
+ */
+export const stripUndefineds = <T extends Record<PropertyKey, unknown>>(
+  val: T,
+): StripUndefineds<T> => {
+  for (const key of Object.keys(val)) {
+    if (val[key] === undefined) {
+      delete val[key];
+    }
+  }
+  return val;
+};
+
+/**
+ * Creates a callback to be passed as 2nd argument to {@link JSON.parse}, allowing or disallowing the `__proto__` property to be parsed.
+ * @param allowProtoProperty Whether the `__proto__` property should be allowed when using {@link JSON.parse}.
+ * @returns A callback to be passed as 2nd argument to {@link JSON.parse}, which will be a function if `allowProtoProperty` is not `true`, and `undefined` otherwise.
+ */
+export const getJSONParseReviver = (allowProtoProperty: boolean) =>
+  allowProtoProperty
+    ? undefined // From https://stackoverflow.com/questions/63926663/how-should-untrusted-json-be-sanitized-before-using-json-parse
+    : (key: string, value: unknown) =>
+        key === "__proto__" ? undefined : value;
+
+/**
+ * The type of return value of {@link stripUndefineds}.
+ */
+export type StripUndefineds<T extends Record<PropertyKey, unknown>> = {
+  [P in NonUndefinedKeys<T>]: T[P];
+};
+
+/**
+ * Gets the all the property names of given object which are not `undefined` type.
+ */
+export type NonUndefinedKeys<T extends Record<PropertyKey, unknown>> = {
+  [P in keyof T]: undefined extends T[P] ? never : P;
+}[keyof T];
