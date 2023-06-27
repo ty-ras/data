@@ -28,7 +28,7 @@ export interface Encoded<TRuntime, TEncoded> {
  *
  * This type is meant to be used by other TyRAS packages.
  */
-export interface HKTEncodedBase {
+export interface EncodedHKTBase {
   /**
    * The encoded specification, typically of shape of {@link Encoded}.
    */
@@ -65,9 +65,9 @@ export type GetRuntimeArray<T> = Array<RuntimeOf<T>>;
 /**
  * Helper type to deduce the in-transit type of data marked with {@link Encoded} type, using custom type in `_TEncodedSpec` property.
  * That type should take one generic argument, and it will be the `TSpec` generic argument of this type.
- * See docs of {@link HKTEncodedBase} for more info.
+ * See docs of {@link EncodedHKTBase} for more info.
  */
-export type EncodedOf<F extends HKTEncodedBase, TSpec> = F extends {
+export type EncodedOf<F extends EncodedHKTBase, TSpec> = F extends {
   readonly typeEncoded: unknown;
 }
   ? (F & {
