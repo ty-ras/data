@@ -10,26 +10,32 @@ import type * as stream from "stream";
  * This is generic function to create a {@link DataValidatorResponseOutputSpec}.
  * It is used by other TyRAS plugins and usually not directly by client code.
  * @param validation The 'native' validator object responsible for validating the object to be serialized.
- * @param validator The same `validation` object wrapped into {@link data.DataValidator}.
  * @param supportedContentType The supported MIME content type. Almost always it is `application/json` or some variant of that.
+ * @param validator The same `validation` object wrapped into {@link data.DataValidator}.
  * @returns The {@link DataValidatorResponseOutputSpec} to be used in validating the object obe serialized as HTTP response body.
  */
 export const responseBodyGeneric = <
-  TOutput,
-  TSerialized,
-  TContentType extends string,
-  TValidator,
+  TResponseBodyRuntime,
+  TResponseBodySerialized,
+  TResponseBodyContentType extends string,
+  TValidatorHKT extends data.ValidatorHKTBase,
 >(
-  validation: TValidator,
+  validation: data.MaterializeEncoder<
+    TValidatorHKT,
+    TResponseBodyRuntime,
+    TResponseBodySerialized
+  >,
+  supportedContentType: TResponseBodyContentType,
   validator: data.DataValidator<
-    TOutput,
-    TSerialized,
+    TResponseBodyRuntime,
+    TResponseBodySerialized,
     DataValidatorResponseOutputError
   >,
-  supportedContentType: TContentType,
 ): DataValidatorResponseOutputSpec<
-  TOutput,
-  Record<TContentType, TValidator>
+  TResponseBodyRuntime,
+  TResponseBodySerialized,
+  TValidatorHKT,
+  TResponseBodyContentType
 > => ({
   validator: (output) => {
     try {
@@ -59,7 +65,12 @@ export const responseBodyGeneric = <
   validatorSpec: {
     contents: {
       [supportedContentType]: validation,
-    } as Record<TContentType, TValidator>,
+    } as DataValidatorResponseOutputValidatorSpec<
+      TResponseBodyRuntime,
+      TResponseBodySerialized,
+      TValidatorHKT,
+      TResponseBodyContentType
+    >["contents"],
   },
 });
 
@@ -67,17 +78,24 @@ export const responseBodyGeneric = <
  * This interface defines shape of the response body validation: the functionality and metadata about it.
  */
 export interface DataValidatorResponseOutputSpec<
-  TOutput,
-  TContents extends TOutputContentsBase,
+  TResponseBodyRuntime,
+  TResponseBodySerialized,
+  TValidatorHKT extends data.ValidatorHKTBase,
+  TResponseBodyContentTypes extends string,
 > {
   /**
    * The callback to perform data validation on object to be serialized as HTTP response body.
    */
-  validator: DataValidatorResponseOutput<TOutput>;
+  validator: DataValidatorResponseOutput<TResponseBodyRuntime>;
   /**
    * The metadata about `validator`.
    */
-  validatorSpec: DataValidatorResponseOutputValidatorSpec<TContents>;
+  validatorSpec: DataValidatorResponseOutputValidatorSpec<
+    TResponseBodyRuntime,
+    TResponseBodySerialized,
+    TValidatorHKT,
+    TResponseBodyContentTypes
+  >;
 }
 
 /**
@@ -121,16 +139,20 @@ export type DataValidatorResponseOutputSuccess = {
  * The metadata about {@link DataValidatorResponseOutput}.
  */
 export interface DataValidatorResponseOutputValidatorSpec<
-  TContents extends TOutputContentsBase,
+  TResponseBodyRuntime,
+  TResponseBodySerialized,
+  TValidatorHKT extends data.ValidatorHKTBase,
+  TResponsetBodyContentTypes extends string,
 > {
   /**
    * The object, key of which is MIME type, and value is data validator _object_.
    * This object is 'native' validator, NOT wrapped in {@link data.DataValidator}
    */
-  contents: TContents;
+  contents: {
+    [P in TResponsetBodyContentTypes]: data.MaterializeEncoder<
+      TValidatorHKT,
+      TResponseBodyRuntime,
+      TResponseBodySerialized
+    >;
+  };
 }
-
-/**
- * This is base type for generic parameter of {@link DataValidatorResponseOutputValidatorSpec}.
- */
-export type TOutputContentsBase = Record<string, unknown>;

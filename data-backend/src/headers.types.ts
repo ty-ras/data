@@ -3,7 +3,8 @@
  */
 
 import type * as data from "@ty-ras/data";
-import type * as s from "./string.types";
+import type * as protocol from "@ty-ras/protocol";
+import * as s from "./string";
 
 /**
  * This type specifies the shape for request header data validation: the validator for each header name, and metadata associated with them.
@@ -11,9 +12,9 @@ import type * as s from "./string.types";
  * @see s.StringDataValidatorSpec
  */
 export type RequestHeaderDataValidatorSpec<
-  THeaderData extends RuntimeAnyHeaders,
-  TDecoder,
-> = HeaderDataValidatorSpec<THeaderData, s.WithDecoder<TDecoder>>;
+  THeaderData extends protocol.TRequestHeadersDataBase,
+  TValidatorHKT extends data.ValidatorHKTBase,
+> = HeaderDataValidatorSpec<THeaderData, TValidatorHKT, true>;
 
 /**
  * This type specifies the shape for response header data validation: the validator for each header name, and metadata associated with them.
@@ -21,90 +22,83 @@ export type RequestHeaderDataValidatorSpec<
  * @see s.StringDataValidatorSpec
  */
 export type ResponseHeaderDataValidatorSpec<
-  THeaderData extends RuntimeAnyHeaders,
-  TEncoder,
-> = HeaderDataValidatorSpec<THeaderData, s.WithEncoder<TEncoder>>;
+  THeaderData extends protocol.TResponseHeadersDataBase,
+  TValidatorHKT extends data.ValidatorHKTBase,
+> = HeaderDataValidatorSpec<THeaderData, TValidatorHKT, false>;
 
 /**
  * This type is generic parametrizable header data validation type used by {@link RequestHeaderDataValidatorSpec} and {@link ResponseHeaderDataValidatorSpec}.
  * It is not meant to be used directly.
  */
 export type HeaderDataValidatorSpec<
-  THeaderData extends RuntimeAnyHeaders,
-  TDecoderOrEncoder,
+  THeaderData extends
+    | protocol.TRequestHeadersDataBase
+    | protocol.TResponseHeadersDataBase,
+  TValidatorHKT extends data.ValidatorHKTBase,
+  IsDecoder extends boolean,
 > = s.StringDataValidatorSpec<
   THeaderData,
-  TDecoderOrEncoder,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  TDecoderOrEncoder extends s.WithDecoder<infer _>
-    ? data.ReadonlyHeaderValue
-    : data.HeaderValue,
-  HeaderValidationAdditionalMetadata
+  TValidatorHKT,
+  true extends IsDecoder ? data.ReadonlyHeaderValue : data.HeaderValue,
+  IsDecoder
 >;
-
-/**
- * This is metadata parameter for {@link s.StringDataValidatorSpec}, and it specifies the properties required for metadata object of each header validation.
- */
-export type HeaderValidationAdditionalMetadata = {
-  /**
-   * This property specifies whether the header is deemed to be required.
-   */
-  required: boolean;
-};
 
 /**
  * This is the metadata information about validation related to request header data validation.
  */
 export type RequestHeaderDataValidatorSpecMetadata<
-  THeaderNames extends string,
-  TDecoder,
-> = HeaderDataValidatorSpecMetadata<THeaderNames, s.WithDecoder<TDecoder>>;
+  THeaderData extends protocol.TRequestHeadersDataBase,
+  TValidatorHKT extends data.ValidatorHKTBase,
+> = HeaderDataValidatorSpecMetadata<THeaderData, TValidatorHKT, true>;
 
 /**
  * This is the metadata information about validation related to response header data validation.
  */
 export type ResponseHeaderDataValidatorSpecMetadata<
-  THeaderNames extends string,
-  TEncoder,
-> = HeaderDataValidatorSpecMetadata<THeaderNames, s.WithEncoder<TEncoder>>;
+  THeaderData extends protocol.TResponseHeadersDataBase,
+  TValidatorHKT extends data.ValidatorHKTBase,
+> = HeaderDataValidatorSpecMetadata<THeaderData, TValidatorHKT, false>;
 
 /**
  * This type is generic parametrizable header data validation type used by {@link RequestHeaderDataValidatorSpecMetadata} and {@link ResponseHeaderDataValidatorSpecMetadata}.
  * It is not meant to be used directly.
  */
 export type HeaderDataValidatorSpecMetadata<
-  THeaderNames extends string,
-  TDecoderOrEncoder,
+  THeaderData extends
+    | protocol.TRequestHeadersDataBase
+    | protocol.TResponseHeadersDataBase,
+  TValidatorHKT extends data.ValidatorHKTBase,
+  IsDecoder extends boolean,
 > = s.StringDataValidatorSpecMetadata<
-  THeaderNames,
-  HeaderValidationAdditionalMetadata & TDecoderOrEncoder
+  THeaderData,
+  TValidatorHKT,
+  true extends IsDecoder ? data.ReadonlyHeaderValue : data.HeaderValue,
+  IsDecoder
 >;
 
 /**
  * This type describes the runtime validators used to validate the request headers.
  */
-export type RequestHeaderDataValidators<THeaderData extends RuntimeAnyHeaders> =
-  HeaderDataValidators<THeaderData, true>;
+export type RequestHeaderDataValidators<
+  THeaderData extends protocol.TRequestHeadersDataBase,
+> = HeaderDataValidators<THeaderData, true>;
 /**
  * This type describes the runtime validators used to validate the response headers.
  */
 export type ResponseHeaderDataValidators<
-  THeaderData extends RuntimeAnyHeaders,
+  THeaderData extends protocol.TResponseHeadersDataBase,
 > = HeaderDataValidators<THeaderData, false>;
 /**
  * This type is generic parametrizable header data validation type used by {@link RequestHeaderDataValidators} and {@link ResponseHeaderDataValidators}.
  * It is not meant to be used directly.
  */
 export type HeaderDataValidators<
-  THeaderData extends RuntimeAnyHeaders,
+  THeaderData extends
+    | protocol.TRequestHeadersDataBase
+    | protocol.TResponseHeadersDataBase,
   IsDecoder extends boolean,
 > = s.StringDataValidators<
   THeaderData,
   true extends IsDecoder ? data.ReadonlyHeaderValue : data.HeaderValue,
   IsDecoder
 >;
-
-/**
- * This type is base type constraint for request or response header data.
- */
-export type RuntimeAnyHeaders = Record<string, unknown>;
