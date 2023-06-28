@@ -133,3 +133,30 @@ test("Test transformEntries works", (t) => {
     { test: 2 },
   );
 });
+
+test("Test stripUndefineds works", (t) => {
+  t.plan(4);
+  t.deepEqual(spec.stripUndefineds({ one: "one", two: undefined }), {
+    one: "one",
+  });
+  t.deepEqual(spec.stripUndefineds({ one: "one", two: null }), {
+    one: "one",
+    two: null,
+  });
+  t.deepEqual(spec.stripUndefineds({ one: "one", two: "two" }), {
+    one: "one",
+    two: "two",
+  });
+  t.deepEqual(spec.stripUndefineds({}), {});
+});
+
+test("Test getJSONParseReviver works", (t) => {
+  t.plan(4);
+  t.deepEqual(spec.getJSONParseReviver(true), undefined);
+  const reviver = spec.getJSONParseReviver(false);
+  if (reviver !== undefined) {
+    t.deepEqual(typeof reviver, "function");
+    t.deepEqual(reviver("some-key", "value"), "value");
+    t.deepEqual(reviver("__proto__", "value"), undefined);
+  }
+});
