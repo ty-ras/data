@@ -5,6 +5,14 @@
 import type * as protocol from "@ty-ras/protocol";
 import * as data from "@ty-ras/data";
 
+/**
+ * This function creates {@link StringDataValidatorSpec}.
+ * It is meant to be used by other TyRAS libraries, not by client code directly.
+ * @param metadata The metadata about validating string-based datas.
+ * @param decoderToValidator The callback to create generic TyRAS {@link data.DataValidator} from native decoder.
+ * @param itemName The name of the thing being decoded (query parameter, header, etc).
+ * @returns The {@link StringDataValidatorSpec} that can be further used in TyRAS libraries.
+ */
 export const stringDataValidatorDecoderGeneric = <
   TStringData extends protocol.TTextualDataBase,
   TValidatorHKT extends data.ValidatorHKTBase,
@@ -83,14 +91,26 @@ export const stringDataValidatorEncoderGeneric = <
   };
 };
 
-// From https://stackoverflow.com/questions/53809467/typescript-how-get-optional-keys-of-type
+/**
+ * This is auxiliary type used by {@link RequiredKeys}.
+ */
 export type KeysOfType<T, U> = {
   [K in keyof T]: T[K] extends U ? K : never;
 }[keyof T];
+
+/**
+ * This is type to extract keys of given object which are required.
+ * Originally from [StackOverflow](https://stackoverflow.com/questions/53809467/typescript-how-get-optional-keys-of-type).
+ */
 export type RequiredKeys<T> = Exclude<
   KeysOfType<T, Exclude<T[keyof T], undefined>>,
   undefined
 >;
+
+/**
+ * This is type to extract keys of given object which are optional.
+ * Originally from [StackOverflow](https://stackoverflow.com/questions/53809467/typescript-how-get-optional-keys-of-type).
+ */
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 export type StringValueValidationMetadata = {

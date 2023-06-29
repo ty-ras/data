@@ -17,13 +17,40 @@ export type StateValidator<TState> = common.DataValidator<
   common.DataValidatorResultError | errors.HTTPProtocolError
 >;
 
+/**
+ * This is base type for all TyRAS endpoint state description [higher-kinded types (HKT)](https://www.matechs.com/blog/encoding-hkts-in-typescript-once-again).
+ * The point of HKT is that it can be used as generic argument without having generic arguments itself, e.g. something like using `function myFunc(list: List)` instead of `function <T>myFunc(list: List<T>)`.
+ */
 export interface StateHKTBase {
-  readonly _argStateValidationMetadata?: unknown;
+  /**
+   * This property will be used as argument for both {@link MaterializeRuntimeState} and {@link MaterializeStateInfo} types.
+   * It should never be overwritten by sub-types.
+   */
+  readonly _argStateSpec?: unknown;
+
+  /**
+   * This property should contain the type expression for {@link MaterializeRuntimeState} type.
+   * It must always be overwritten by sub-types.
+   */
   readonly _getState?: unknown;
+
+  /**
+   * This property should contain the type expression for {@link MaterializeStateInfo} type.
+   * It must always be overwritten by sub-types.
+   */
   readonly _getStateInfo?: unknown;
+
+  /**
+   * This property should contain the type expression for {@link MaterializeStateSpecBase} type.
+   * It must always be overwritten by sub-types.
+   */
   readonly _getStateSpecBase?: unknown;
 }
 
+/**
+ * This type is responsible for materializing the actual type of the state information when the endpoint is invoked.
+ * @see StateHKTBase
+ */
 export type MaterializeRuntimeState<
   TStateHKT extends StateHKTBase,
   TStateSpec,
@@ -31,10 +58,14 @@ export type MaterializeRuntimeState<
   readonly _getState: unknown;
 }
   ? (TStateHKT & {
-      readonly _argStateValidationMetadata: TStateSpec;
+      readonly _argStateSpec: TStateSpec;
     })["_getState"]
   : never;
 
+/**
+ * This type is responsible for materializing the actual type for public information about the state specification.
+ * @see StateHKTBase
+ */
 export type MaterializeStateInfo<
   TStateHKT extends StateHKTBase,
   TStateSpec,
@@ -42,10 +73,14 @@ export type MaterializeStateInfo<
   readonly _getStateInfo: unknown;
 }
   ? (TStateHKT & {
-      readonly _argStateValidationMetadata: TStateSpec;
+      readonly _argStateSpec: TStateSpec;
     })["_getStateInfo"]
   : never;
 
+/**
+ * This type is responsible for materializing the actual type which can be used as base type constraint for e.g. generic type arguments.
+ * @see StateHKTBase
+ */
 export type MaterializeStateSpecBase<TStateHKT extends StateHKTBase> =
   TStateHKT extends {
     readonly _getStateSpecBase: unknown;
