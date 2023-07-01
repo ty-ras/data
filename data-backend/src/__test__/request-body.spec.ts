@@ -151,6 +151,34 @@ test("Validate request body detects invalid JSON", async (c) => {
   });
 });
 
+test("Validate that custom read body rawbody options works", async (c) => {
+  c.plan(1);
+  const { validator } = spec.requestBodyGeneric<
+    string,
+    typeof common.CONTENT_TYPE,
+    common.ValidatorHKT
+  >(
+    common.VALIDATOR_NATIVE,
+    common.CONTENT_TYPE,
+    true,
+    { encoding: "utf16le" },
+    common.validatorForValue("value"),
+    false,
+  );
+  c.deepEqual(
+    await validator({
+      contentType: common.CONTENT_TYPE,
+      input: stream.Readable.from([
+        Buffer.from(JSON.stringify("value"), "utf16le"),
+      ]),
+    }),
+    {
+      error: "none",
+      data: "value",
+    },
+  );
+});
+
 const createRequestBody = <T>(
   value: T,
   strictContentType = false,
@@ -167,9 +195,8 @@ const createRequestBodyWithValidator = <T>(
   strictContentType = false,
   overrideEncoding?: string,
 ) =>
-  spec.requestBodyGeneric(
+  spec.requestBodyGeneric<T, typeof common.CONTENT_TYPE, common.ValidatorHKT>(
     common.VALIDATOR_NATIVE,
-    validator,
     common.CONTENT_TYPE,
     strictContentType,
     async (readable, encoding) => {
@@ -183,4 +210,6 @@ const createRequestBodyWithValidator = <T>(
       }
       return blocks.join("");
     },
+    validator,
+    false,
   );

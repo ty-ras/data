@@ -65,6 +65,15 @@ export interface URLParameterInfo<
   regExp: RegExp;
 }
 
+/**
+ * This function creates {@link URLParameterInfo} for decoding (deserializing) data.
+ * It is meant to be used by other TyRAS libraries, not by client code directly.
+ * @param name The name of the URL path parameter.
+ * @param decoder The native decoder for the parameter.
+ * @param regExp The regular expression to match the parameter in URL path.
+ * @param decoderToValidator The callback to create TyRAS {@link data.DataValidator} from native decoder.
+ * @returns The {@link URLParameterInfo} to be used by other TyRAS libraries.
+ */
 export const urlParameterGeneric = <
   TName extends string,
   TParameter,

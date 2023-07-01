@@ -6,7 +6,7 @@ import type * as protocol from "@ty-ras/protocol";
 import * as data from "@ty-ras/data";
 
 /**
- * This function creates {@link StringDataValidatorSpec}.
+ * This function creates {@link StringDataValidatorSpec} for decoding (deserializing) data.
  * It is meant to be used by other TyRAS libraries, not by client code directly.
  * @param metadata The metadata about validating string-based datas.
  * @param decoderToValidator The callback to create generic TyRAS {@link data.DataValidator} from native decoder.
@@ -52,6 +52,14 @@ export const stringDataValidatorDecoderGeneric = <
   };
 };
 
+/**
+ * This function creates {@link StringDataValidatorSpec} for encoding (serializing) data.
+ * It is meant to be used by other TyRAS libraries, not by client code directly.
+ * @param metadata The metadata about validating string-based datas.
+ * @param encoderToValidator The callback to create generic TyRAS {@link data.DataValidator} from native encoder.
+ * @param itemName The name of the thing being decoded (query parameter, header, etc).
+ * @returns The {@link StringDataValidatorSpec} that can be further used in TyRAS libraries.
+ */
 export const stringDataValidatorEncoderGeneric = <
   TStringData extends protocol.TTextualDataBase,
   TValidatorHKT extends data.ValidatorHKTBase,
@@ -113,10 +121,6 @@ export type RequiredKeys<T> = Exclude<
  */
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
-export type StringValueValidationMetadata = {
-  [P in "required"]: boolean;
-};
-
 /**
  * This interface defines shape related to validating generic named textual parameters, and holding metadata about the validators.
  */
@@ -163,19 +167,6 @@ export type StringDataValidatorSpecMetadata<
     : WithEncoder<TValidatorHKT, TStringData[P], TSerializedValue>) & {
     required: false;
   };
-};
-
-export type StringDataValidatorSpecMetadataGeneric<
-  TStringData extends protocol.TTextualDataBase,
-  TValidatorHKT extends data.ValidatorHKTBase,
-  TSerializedValue,
-  TAdditionalMetadata extends Record<string, unknown>,
-  IsDecoder extends boolean,
-> = {
-  [P in keyof TStringData]-?: TAdditionalMetadata &
-    (true extends IsDecoder
-      ? WithDecoder<TValidatorHKT, TStringData[P]>
-      : WithEncoder<TValidatorHKT, TStringData[P], TSerializedValue>);
 };
 
 /**
