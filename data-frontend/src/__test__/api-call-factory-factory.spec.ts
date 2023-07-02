@@ -118,7 +118,6 @@ test("API Call Factory Factory works", async (t) => {
   );
 });
 
-// x.urlValidation`/api/${urlParam("urlParam")}`
 test("API Call Factory works for endpoint with URL parameters", async (c) => {
   await performOneTest(
     c,
