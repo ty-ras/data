@@ -3,12 +3,13 @@
  */
 
 import type * as protocol from "@ty-ras/protocol";
-import type * as data from "@ty-ras/data";
+import * as data from "@ty-ras/data";
 
 /**
  *
  * @param fragments
  * @param args
+ * @param parametersToValidator
  * @returns
  */
 export function urlGeneric<
@@ -16,10 +17,38 @@ export function urlGeneric<
   TArgs extends Array<URLParameterInfo<string, any, TValidatorHKT>>,
 >(
   fragments: TemplateStringsArray,
-  ...args: TArgs
+  args: TArgs,
+  parametersToValidator: (decoders: {
+    [P in keyof URLParameterReducer<TArgs>]: data.MaterializeEncoder<
+      TValidatorHKT,
+      URLParameterReducer<TArgs>[P],
+      string
+    >;
+  }) => data.MaterializeEncoder<TValidatorHKT, {}, {}>,
 ):
   | string
   | data.DataValidator<protocol.RuntimeOf<URLParameterReducer<TArgs>>, string> {
+  if (fragments.length !== args.length + 1) {
+    throw new Error(
+      "Please call this function as string template literal: <function-name><template string expression with back-ticks>, not using the traditional parenthesis call-style.",
+    );
+  }
+
+  const argsToIndex = Object.fromEntries(
+    args.map(({ name }, index) => [name, index]),
+  );
+  data.transitiveDataValidation(
+    parametersToValidator(
+      Object.fromEntries(args.map(({ name, encoder }) => [name, encoder])) as {
+        [P in keyof URLParameterReducer<TArgs>]: data.MaterializeEncoder<
+          TValidatorHKT,
+          URLParameterReducer<TArgs>[P],
+          string
+        >;
+      },
+    ),
+    (validatedUrl): data.DataValidationResultSuccess<string> => ({}),
+  );
   return args.length > 0 ? Object.fromEntries() : fragments[0];
 }
 
@@ -29,6 +58,7 @@ export function urlGeneric<
  */
 export type URLParameterReducer<
   Arr extends Array<unknown>,
+  // eslint-disable-next-line @typescript-eslint/ban-types
   Result extends Record<string, unknown> = {},
 > = Arr extends []
   ? Result
@@ -59,9 +89,10 @@ export interface URLParameterInfo<
   /**
    * The 'native' decoder of paramter (io-ts/zod/runtypes/etc).
    */
-  decoder: data.MaterializeEncoder<TValidatorHKT, string, TRuntime>;
+  encoder: data.MaterializeEncoder<TValidatorHKT, TRuntime, string>;
+
   /**
-   * The TyRAS {@link data.DataValidator} callback invoking the `decoder`.
+   * The {@link RegExp} for URL path parameter.
    */
-  validator: data.DataValidator<string, TRuntime>;
+  regExp: RegExp;
 }
