@@ -6,11 +6,13 @@ import type * as protocol from "@ty-ras/protocol";
 import * as data from "@ty-ras/data";
 
 /**
- *
- * @param fragments
- * @param args
- * @param parametersToValidator
- * @returns
+ * This function creates {@link data.DataValidator} for encoding (serializing) URL path parameters into URL path string.
+ * It is meant to be used by other TyRAS libraries, not by client code directly.
+ * @param fragments The string fragments passed to string template literal function.
+ * @param args The arguments passed to string template literal function.
+ * @param parametersToValidator Callback to create one encoder from collection of named encoders.
+ * @param encoderToValidator Callback to convert native encoder to {@link data.DataValidator}.
+ * @returns The URL path as string if there are no URL path parameters, or a callback to convert given parameters to URL path string.
  */
 export function urlGeneric<
   TValidatorHKT extends data.ValidatorHKTBase,
@@ -24,7 +26,14 @@ export function urlGeneric<
       URLParameterReducer<TArgs>[P],
       string
     >;
-  }) => data.MaterializeEncoder<TValidatorHKT, {}, {}>,
+  }) => data.MaterializeEncoder<
+    TValidatorHKT,
+    { [P in keyof URLParameterReducer<TArgs>]: URLParameterReducer<TArgs>[P] },
+    { [P in keyof URLParameterReducer<TArgs>]: string }
+  >,
+  encoderToValidator: <TRuntime, TEncoded>(
+    encoder: data.MaterializeEncoder<TValidatorHKT, TRuntime, TEncoded>,
+  ) => data.DataValidator<TRuntime, TEncoded>,
 ):
   | string
   | data.DataValidator<protocol.RuntimeOf<URLParameterReducer<TArgs>>, string> {
@@ -37,19 +46,27 @@ export function urlGeneric<
   const argsToIndex = Object.fromEntries(
     args.map(({ name }, index) => [name, index]),
   );
-  data.transitiveDataValidation(
-    parametersToValidator(
-      Object.fromEntries(args.map(({ name, encoder }) => [name, encoder])) as {
-        [P in keyof URLParameterReducer<TArgs>]: data.MaterializeEncoder<
-          TValidatorHKT,
-          URLParameterReducer<TArgs>[P],
-          string
-        >;
-      },
+  const validator = data.transitiveDataValidation(
+    encoderToValidator(
+      parametersToValidator(
+        Object.fromEntries(
+          args.map(({ name, encoder }) => [name, encoder]),
+        ) as {
+          [P in keyof URLParameterReducer<TArgs>]: data.MaterializeEncoder<
+            TValidatorHKT,
+            URLParameterReducer<TArgs>[P],
+            string
+          >;
+        },
+      ),
     ),
-    (validatedUrl): data.DataValidationResultSuccess<string> => ({}),
+    (validatedUrl): data.DataValidatorResultSuccess<string> => ({
+      error: "none",
+      data: "",
+    }),
   );
-  return args.length > 0 ? Object.fromEntries() : fragments[0];
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+  return args.length > 0 ? (validator as any) : fragments[0];
 }
 
 /**
