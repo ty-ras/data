@@ -1,6 +1,7 @@
 /**
  * @file This file contains unit tests for code in `../errors.ts`.
  */
+
 import test from "ava";
 import * as spec from "../errors";
 
