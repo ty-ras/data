@@ -428,10 +428,10 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
-"@ty-ras/data@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@ty-ras/data/-/data-2.0.0.tgz#daf10560d3a588cb72481799c6837610627cfdd3"
-  integrity sha512-LnwfUDoKrM6ipEcl6r/96rcP2+mqmom00vCNa7b4wNPkm0yuyBS0qZyhZh2sfzpUufFgMIg6XtKhY6ocNhoQRg==
+"@ty-ras/data@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@ty-ras/data/-/data-2.1.0.tgz#33bc70d3f2562dc15098980595ce9987eb2d90f4"
+  integrity sha512-gMof9tw4SUqjcb6d4J4O+p0nsYTi5Wl+9BOc7t5aiPm/dcMA88sqiVDTbKDREFhLuZ6H3YoJApyKfuJUTzZV0A==
   dependencies:
     "@ty-ras/protocol" "^2.0.0"
 

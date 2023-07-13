@@ -5,6 +5,7 @@
 import test from "ava";
 import * as spec from "../url";
 import * as common from "./common";
+import * as data from "@ty-ras/data";
 
 test("Test that URL parameter works", (c) => {
   c.plan(4);
@@ -42,14 +43,9 @@ test("Test that URL parameter works without regexp", (c) => {
   );
   c.deepEqual(decoder, common.VALIDATOR_NATIVE);
   c.deepEqual(name, "urlParam");
-  c.deepEqual(regExp, spec.defaultParameterRegExp());
+  c.deepEqual(regExp, data.defaultParameterRegExp());
   c.deepEqual(
     validator(common.VALIDATOR_NATIVE),
     common.validatorForValue(common.VALIDATOR_NATIVE)(common.VALIDATOR_NATIVE),
   );
-});
-
-test("Test default parameter regexp", (c) => {
-  c.plan(1);
-  c.deepEqual(spec.defaultParameterRegExp(), /[^/]+/);
 });

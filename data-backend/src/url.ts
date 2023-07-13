@@ -3,7 +3,7 @@
  */
 
 import type * as protocol from "@ty-ras/protocol";
-import type * as data from "@ty-ras/data";
+import * as data from "@ty-ras/data";
 import type * as s from "./string";
 
 /**
@@ -87,15 +87,7 @@ export const urlParameterGeneric = <
   ) => data.DataValidator<data.ReadonlyStringValue, TRuntime>,
 ): URLParameterInfo<TName, TParameter, TValidatorHKT> => ({
   name,
-  regExp: regExp ?? defaultParameterRegExp(),
+  regExp: regExp ?? data.defaultParameterRegExp(),
   validator: decoderToValidator(decoder),
   decoder,
 });
-
-const DEFAULT_PARAM_REGEXP = /[^/]+/;
-/**
- * This helper callback creates new {@link RegExp} which has the default pattern to match parameters encoded in URL path string.
- * The pattern is `[^/]+`, so as many consecutive characters as possible until encountering first `/`.
- * @returns A new RegExp with the default pattern to match parameters encoded in URL path string.
- */
-export const defaultParameterRegExp = () => new RegExp(DEFAULT_PARAM_REGEXP);
