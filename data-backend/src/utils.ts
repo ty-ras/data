@@ -2,6 +2,7 @@
  * @file This file contains generic utilities related to HTTP headers and URL parameter RegExps.
  */
 
+import type * as protocol from "@ty-ras/protocol";
 import type * as data from "@ty-ras/data";
 import type * as h from "./headers.types";
 
@@ -14,7 +15,9 @@ import type * as h from "./headers.types";
  * @returns The tuple describing: whether the headers passed validation, the possibly validated headers if so, and any errors.
  */
 export const checkHeaders = <
-  THeaderData extends h.RuntimeAnyHeaders,
+  THeaderData extends
+    | protocol.TRequestHeadersDataBase
+    | protocol.TResponseHeadersDataBase,
   IsDecoder extends boolean,
 >(
   headersValidation: h.HeaderDataValidators<THeaderData, IsDecoder>,
@@ -28,7 +31,7 @@ export const checkHeaders = <
   const headers: Record<
     string,
     {
-      [P in keyof THeaderData]: THeaderData[P] extends data.DataValidator<
+      [P in keyof THeaderData]: (typeof headersValidation)[P] extends data.DataValidator<
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         infer _,
         infer TData
@@ -63,11 +66,3 @@ export const checkHeaders = <
 
   return [proceedToInvokeHandler, headers, errors] as const;
 };
-
-const DEFAULT_PARAM_REGEXP = /[^/]+/;
-/**
- * This helper callback creates new {@link RegExp} which has the default pattern to match parameters encoded in URL path string.
- * The pattern is `[^/]+`, so as many consecutive characters as possible until encountering first `/`.
- * @returns A new RegExp with the default pattern to match parameters encoded in URL path string.
- */
-export const defaultParameterRegExp = () => new RegExp(DEFAULT_PARAM_REGEXP);

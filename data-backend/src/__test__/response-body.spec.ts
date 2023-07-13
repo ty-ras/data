@@ -71,8 +71,9 @@ const createResponseBody = <T>(value: T) =>
 const createResponseBodyWithValidator = <T>(
   validator: data.DataValidator<unknown, T>,
 ) =>
-  spec.responseBodyGeneric(
-    common.VALIDATOR_NATIVE,
-    validator,
-    common.CONTENT_TYPE,
-  );
+  spec.responseBodyGeneric<
+    unknown,
+    T,
+    typeof common.CONTENT_TYPE,
+    common.ValidatorHKT
+  >(common.VALIDATOR_NATIVE, common.CONTENT_TYPE, validator);

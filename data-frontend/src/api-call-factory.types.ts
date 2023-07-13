@@ -12,7 +12,7 @@ import type * as apiCall from "./api-call.types";
  * It is meant to be used by other TyRAS libraries (to lock down first generic argument) and not directly by client code.
  */
 export interface APICallFactoryBase<
-  THKTEncoded extends protocol.HKTEncodedBase,
+  THKTEncoded extends protocol.EncodedHKTBase,
   THeaders extends string,
 > {
   /**
@@ -20,7 +20,12 @@ export interface APICallFactoryBase<
    * Please use explicit generic argument when calling this method: `.makeAPICall<myProtocol.GetSomeData>(...)`.
    * @param args The arguments as specified by {@link protocol.ProtocolSpecCore} generic argument.
    */
-  makeAPICall<TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>>(
+  makeAPICall<
+    TProtocolSpec extends protocol.ProtocolSpecCore<
+      protocol.HttpMethod,
+      unknown
+    >,
+  >(
     args: MakeAPICallArgs<
       TProtocolSpec["method"],
       TProtocolSpec["responseBody"]
@@ -144,7 +149,7 @@ export interface MakeAPICallArgsURLData<TURLData> {
  * Helper type to make type with query parameters.
  */
 export interface MakeAPICallArgsQuery<
-  THKTEncoded extends protocol.HKTEncodedBase,
+  THKTEncoded extends protocol.EncodedHKTBase,
   TQueryData,
 > {
   /**
@@ -160,7 +165,7 @@ export interface MakeAPICallArgsQuery<
  * Helper type to make type with HTTP request body.
  */
 export interface MakeAPICallArgsBody<
-  THKTEncoded extends protocol.HKTEncodedBase,
+  THKTEncoded extends protocol.EncodedHKTBase,
   TBodyData,
 > {
   /**

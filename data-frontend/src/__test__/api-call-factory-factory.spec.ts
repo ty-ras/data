@@ -1,14 +1,16 @@
 /**
  * @file This file contains unit tests for code in `../api-call-factory-factory.ts`.
  */
-/* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any */
+
 import test, { ExecutionContext } from "ava";
-import type * as data from "@ty-ras/data";
+import * as data from "@ty-ras/data";
 import { isDeepStrictEqual } from "util";
 import * as spec from "../api-call-factory-factory";
 import type * as factory from "../api-call-factory.types";
 import type * as apiCall from "../api-call.types";
 import * as protocol from "@ty-ras/protocol";
+
+/* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any */
 
 test("API Call Factory Factory works", async (t) => {
   t.plan(10);
@@ -118,6 +120,29 @@ test("API Call Factory Factory works", async (t) => {
   );
 });
 
+test("API Call Factory works for endpoint with URL parameters", async (c) => {
+  await performOneTest(
+    c,
+    {},
+    { method: "GET", url: "/api/urlParameter" },
+    { body: { protocol: "APIEndpointWithURLParameters" } },
+    ({ apiCallFactory }) =>
+      apiCallFactory.makeAPICall<APIEndpointWithURLParameters>({
+        method: "GET",
+        url: data.transitiveDataValidation(
+          validatorForValue({ urlParameter: "urlParameter" }),
+          (urlParams): data.DataValidatorResult<string> => ({
+            error: "none",
+            data: `/api/${urlParams.urlParameter}`,
+          }),
+        ),
+        response: validatorForValue({
+          protocol: "APIEndpointWithURLParameters",
+        }),
+      })({ url: { urlParameter: "urlParameter" } }),
+  );
+});
+
 test("API Call Factory Factory detects erroneous parameters", async (t) => {
   t.plan(2);
   const httpCall: spec.CallHTTPEndpoint = () => {
@@ -165,14 +190,11 @@ test("API Call Factory Factory detects erroneous parameters", async (t) => {
       error: "error-input",
       errorInfo: {
         headers: {
-          error: "validator-error",
+          error: "error",
           errorInfo: {
-            error: "error",
-            errorInfo: {
-              "X-Custom-Header": 123,
-            },
-            getHumanReadableMessage,
+            "X-Custom-Header": 123,
           },
+          getHumanReadableMessage,
         },
       },
     },
@@ -208,6 +230,13 @@ type APIEndpointWithResponseHeaders = APIEndpointCore & {
   };
 };
 
+type APIEndpointWithURLParameters = APIEndpointCore & {
+  responseBody: { protocol: "APIEndpointWithURLParameters" };
+  url: {
+    urlParameter: "urlParameter";
+  };
+};
+
 const getHumanReadableMessage = () => "";
 
 const validatorForValue =
@@ -227,7 +256,7 @@ const performOneTest = async <
   response: spec.HTTPInvocationResult,
   getAPICall: (args: {
     apiCallFactory: factory.APICallFactoryBase<
-      protocol.HKTEncodedBase,
+      protocol.EncodedHKTBase,
       keyof THeaders & string
     >;
     expectedArg: TExpectedArg;
@@ -249,7 +278,7 @@ const performOneTestOrError = async <
   response: spec.HTTPInvocationResult,
   getAPICall: (args: {
     apiCallFactory: factory.APICallFactoryBase<
-      protocol.HKTEncodedBase,
+      protocol.EncodedHKTBase,
       keyof THeaders & string
     >;
     expectedArg: TExpectedArg;

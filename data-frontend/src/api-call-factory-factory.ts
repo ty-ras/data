@@ -7,6 +7,8 @@ import * as data from "@ty-ras/data";
 import type * as apiCall from "./api-call.types";
 import type * as apiCallFactory from "./api-call-factory.types";
 
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
+
 /**
  * Function to create objects which can create {@link apiCall.APICallFactoryBase} callbacks.
  * This function is meant to be used by other TyRAS libraries, and not directly by client code.
@@ -14,7 +16,7 @@ import type * as apiCallFactory from "./api-call-factory.types";
  * @returns An object with `withHeaders` function, which will then return the {@link apiCall.APICallFactoryBase} callbacks.
  */
 export const createAPICallFactoryGeneric = <
-  THKTEncoded extends protocol.HKTEncodedBase,
+  THKTEncoded extends protocol.EncodedHKTBase,
 >(
   callHttpEndpoint: CallHTTPEndpoint,
 ): {
@@ -27,7 +29,10 @@ export const createAPICallFactoryGeneric = <
     // eslint-disable-next-line sonarjs/cognitive-complexity
     withHeaders: (headers) => ({
       makeAPICall: <
-        TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>,
+        TProtocolSpec extends protocol.ProtocolSpecCore<
+          protocol.HttpMethod,
+          unknown
+        >,
       >({
         method,
         response,
@@ -83,58 +88,44 @@ export const createAPICallFactoryGeneric = <
             );
           }
         }
-        const componentValidations = data
-          .newCombiner()
-          .withValidator(
-            "url",
+        const componentValidations = {
+          url:
             typeof url === "string"
               ? data.transitiveDataValidation(
                   undefinedValidator,
                   returnURL(url),
                 )
               : url,
-          )
-          .withValidator(
-            "headers",
-            "headers" in rest
-              ? (rest.headers as data.DataValidator<
-                  unknown,
-                  Record<string, data.HeaderValue>,
-                  DataValidatorError<typeof undefinedValidator>
-                >)
-              : undefined,
-          )
-          .withValidator(
-            "query",
-            "query" in rest
-              ? (rest.query as data.DataValidator<
-                  unknown,
-                  Record<string, data.OneOrMany<string | number | boolean>>,
-                  DataValidatorError<typeof undefinedValidator>
-                >)
-              : undefined,
-          )
-          .withValidator("body", "body" in rest ? rest.body : undefined);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return (async (
-          args: void | protocol.RuntimeOf<
+          ...pick<
             Partial<
-              Record<"method" | "url" | "query" | "body" | "headers", unknown>
-            >
-          >,
-        ) => {
-          const validatedArgs = componentValidations.getOutputs({
-            ...(args ?? {}),
-            url: args ? args.url : undefined,
-          });
-          if (validatedArgs.error === "none") {
+              apiCallFactory.MakeAPICallArgsHeadersData<
+                Record<string, unknown>
+              > &
+                apiCallFactory.MakeAPICallArgsQuery<
+                  THKTEncoded,
+                  Record<string, unknown>
+                > &
+                apiCallFactory.MakeAPICallArgsBody<THKTEncoded, unknown>
+            >,
+            "headers" | "query" | "body"
+          >(rest as any, "headers", "query", "body"),
+        };
+
+        return async (args) => {
+          let retVal: apiCall.APICallResult<
+            protocol.RuntimeOf<apiCall.GetProtocolReturnType<TProtocolSpec>>
+          >;
+          const validatedArgs = data.transformEntries(
+            componentValidations,
+            (componentValidation, componentValidationName) =>
+              componentValidation?.(args?.[componentValidationName] as any),
+          );
+          const validatedArgsResult = traverseValidatorResults(validatedArgs);
+          if (validatedArgsResult.error === "none") {
             const httpArgs: HTTPInvocationArguments = {
               method,
-              ...validatedArgs.data,
+              ...validatedArgsResult.data,
             };
-            if ("headers" in rest) {
-              httpArgs.headers = validatedArgs.data.headers;
-            }
             if ("headerFunctionality" in rest) {
               httpArgs.headers = Object.assign(
                 httpArgs.headers ?? {},
@@ -162,30 +153,30 @@ export const createAPICallFactoryGeneric = <
               );
               if (responseHeaders.error === "none") {
                 const body = response(rawBody);
-                return body.error === "none"
-                  ? {
-                      error: "none",
-                      data: {
-                        body: body.data,
-                        headers: responseHeaders.data,
-                      },
-                    }
-                  : body;
+                retVal =
+                  body.error === "none"
+                    ? {
+                        error: "none",
+                        data: {
+                          body: body.data,
+                          headers: responseHeaders.data,
+                        } as any,
+                      }
+                    : body;
               } else {
-                return responseHeaders;
+                retVal = responseHeaders;
               }
             } else {
-              return response(rawBody);
+              retVal = response(rawBody) as any;
             }
           } else {
-            return {
+            retVal = {
               error: "error-input",
-              errorInfo: validatedArgs.errorInfo,
+              errorInfo: validatedArgsResult.errorInfo,
             };
           }
-          // TODO fix this 'as any' at some point
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        }) as any;
+          return retVal;
+        };
       },
     }),
   };
@@ -247,16 +238,6 @@ export type HTTPInvocationResult = {
   headers?: Record<string, data.HeaderValue>;
 };
 
-type DataValidatorError<T> = T extends data.DataValidator<
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  infer _,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  infer _1,
-  infer TError
->
-  ? TError
-  : never;
-
 const undefinedValidator: data.DataValidator<unknown, undefined> = (data) =>
   data === undefined
     ? { error: "none", data }
@@ -268,3 +249,44 @@ const returnURL =
     error: "none",
     data: url,
   });
+
+const pick = <T extends object, TKey extends keyof T>(
+  obj: T,
+  ...keys: ReadonlyArray<TKey>
+) => {
+  return Object.fromEntries(
+    keys.filter((key) => key in obj).map((key) => [key, obj[key]]),
+  ) as Pick<T, TKey>;
+};
+
+// Kinda like fp-ts's traverse/apply but for record of data validator outputs
+const traverseValidatorResults = (
+  result: Partial<
+    Record<
+      "url" | "query" | "headers" | "body",
+      data.DataValidatorResult<any> | undefined
+    >
+  >,
+):
+  | apiCall.APICallResultInputError
+  | data.DataValidatorResultSuccess<
+      Omit<HTTPInvocationArguments, "method">
+    > => {
+  const entries = Object.entries(result);
+  return entries.every(([, result]) => result?.error === "none")
+    ? {
+        error: "none",
+        data: Object.fromEntries(
+          entries.map(([key, result]) => [
+            key,
+            (result as data.DataValidatorResultSuccess<any>).data,
+          ]),
+        ) as any,
+      }
+    : {
+        error: "error-input",
+        errorInfo: Object.fromEntries(
+          entries.filter(([, result]) => result?.error !== "none"),
+        ),
+      };
+};

@@ -54,7 +54,7 @@ export type APICallResultInputError = {
    * Information about the errors occurred in the validating data.
    */
   errorInfo: Partial<{
-    [P in "method" | "url" | "query" | "body"]: data.ValidationChainError;
+    [P in "method" | "url" | "query" | "body"]: data.DataValidatorResultError;
   }>;
 };
 
@@ -63,9 +63,12 @@ export type APICallResultInputError = {
  * @see protocol.ProtocolSpecCore
  */
 export type GetAPICall<
-  TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>,
+  TProtocolSpec extends protocol.ProtocolSpecCore<protocol.HttpMethod, unknown>,
 > = APICall<
-  TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown> & {
+  TProtocolSpec extends protocol.ProtocolSpecCore<
+    protocol.HttpMethod,
+    unknown
+  > & {
     [P in keyof (protocol.ProtocolSpecURL<Record<string, unknown>> &
       protocol.ProtocolSpecHeaderData<Record<string, unknown>> &
       protocol.ProtocolSpecQuery<Record<string, unknown>> &
@@ -94,7 +97,7 @@ export type GetAPICall<
  * @see protocol.ProtocolSpecCore
  */
 export type GetProtocolReturnType<
-  TProtocolSpec extends protocol.ProtocolSpecCore<string, unknown>,
+  TProtocolSpec extends protocol.ProtocolSpecCore<protocol.HttpMethod, unknown>,
 > = TProtocolSpec extends protocol.ProtocolSpecResponseHeaders<infer THeaders>
   ? {
       body: TProtocolSpec["responseBody"];
@@ -107,7 +110,10 @@ export type GetProtocolReturnType<
  * @see protocol.ProtocolSpecCore
  */
 export type GetAPICalls<
-  T extends Record<string, protocol.ProtocolSpecCore<string, unknown>>,
+  T extends Record<
+    string,
+    protocol.ProtocolSpecCore<protocol.HttpMethod, unknown>
+  >,
 > = {
   [P in keyof T]: GetAPICall<T[P]>;
 };
