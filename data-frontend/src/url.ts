@@ -20,8 +20,8 @@ export function urlGeneric<
   TArgs extends Array<URLParameterInfo<string, any, TValidatorHKT>>,
 >(
   fragments: TemplateStringsArray,
-  args: TArgs | undefined,
-  parametersToValidator: (decoders: {
+  args: TArgs,
+  parametersToValidator: (encoders: {
     [P in keyof URLParameterReducer<TArgs>]: data.MaterializeEncoder<
       TValidatorHKT,
       URLParameterReducer<TArgs>[P],
@@ -38,9 +38,6 @@ export function urlGeneric<
 ):
   | string
   | data.DataValidator<protocol.RuntimeOf<URLParameterReducer<TArgs>>, string> {
-  if (args === undefined) {
-    args = [] as unknown as TArgs;
-  }
   if (fragments.length !== args.length + 1) {
     throw new Error(
       "Please call this function as string template literal: <function-name><template string expression with back-ticks>, not using the traditional parenthesis call-style.",
