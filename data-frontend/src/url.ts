@@ -16,10 +16,11 @@ import * as data from "@ty-ras/data";
  */
 export function urlGeneric<
   TValidatorHKT extends data.ValidatorHKTBase,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TArgs extends Array<URLParameterInfo<string, any, TValidatorHKT>>,
 >(
   fragments: TemplateStringsArray,
-  args: TArgs,
+  args: TArgs | undefined,
   parametersToValidator: (decoders: {
     [P in keyof URLParameterReducer<TArgs>]: data.MaterializeEncoder<
       TValidatorHKT,
@@ -37,15 +38,16 @@ export function urlGeneric<
 ):
   | string
   | data.DataValidator<protocol.RuntimeOf<URLParameterReducer<TArgs>>, string> {
+  if (args === undefined) {
+    args = [] as unknown as TArgs;
+  }
   if (fragments.length !== args.length + 1) {
     throw new Error(
       "Please call this function as string template literal: <function-name><template string expression with back-ticks>, not using the traditional parenthesis call-style.",
     );
   }
 
-  const argsToIndex = Object.fromEntries(
-    args.map(({ name }, index) => [name, index]),
-  );
+  const argNames = args.map(({ name }) => name);
   const validator = data.transitiveDataValidation(
     encoderToValidator(
       parametersToValidator(
@@ -60,10 +62,14 @@ export function urlGeneric<
         },
       ),
     ),
-    (validatedUrl): data.DataValidatorResultSuccess<string> => ({
-      error: "none",
-      data: "",
-    }),
+    (validatedUrl): data.DataValidatorResultSuccess<string> =>
+      // TODO validate url param strings against regexp!
+      ({
+        error: "none",
+        data: Array.from(
+          generateURLPath(fragments, argNames, validatedUrl),
+        ).join(""),
+      }),
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   return args.length > 0 ? (validator as any) : fragments[0];
@@ -113,3 +119,38 @@ export interface URLParameterInfo<
    */
   regExp: RegExp;
 }
+
+function* generateURLPath(
+  fragments: ReadonlyArray<string>,
+  argNames: ReadonlyArray<string>,
+  validatedUrl: Record<string, string>,
+): Generator<string> {
+  for (const [idx, fragment] of fragments.entries()) {
+    yield fragment;
+    if (idx < argNames.length) {
+      yield validatedUrl[argNames[idx]];
+    }
+  }
+}
+
+/**
+ * This function creates {@link URLParameterInfo} from given arguments.
+ * It is meant to be used by other TyRAS libraries, not by client code directly.
+ * @param name The name of the URL parameter.
+ * @param encoder The encoder for URL parameter.
+ * @param regExp The regular expression that the encoded URL parameter should adher to.
+ * @returns The {@link URLParameterInfo} to be used in {@link url}.
+ */
+export const urlParamGeneric = <
+  TName extends string,
+  TRuntime,
+  TValidatorHKT extends data.ValidatorHKTBase,
+>(
+  name: TName,
+  encoder: data.MaterializeEncoder<TValidatorHKT, TRuntime, string>,
+  regExp: RegExp | undefined,
+): URLParameterInfo<TName, TRuntime, TValidatorHKT> => ({
+  name,
+  encoder,
+  regExp: regExp ?? data.defaultParameterRegExp(),
+});
