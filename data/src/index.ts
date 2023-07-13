@@ -4,6 +4,7 @@
 
 export * from "./validation";
 export * from "./methods";
+export * from "./url";
 export * from "./utils";
 export type * from "./values.types";
 export type * from "./hkt.types";
