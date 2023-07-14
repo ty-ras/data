@@ -45,6 +45,9 @@ export function urlGeneric<
   }
 
   const argNames = args.map(({ name }) => name);
+  const argNamesToRegExp = Object.fromEntries(
+    args.map(({ name, regExp }) => [name, regExp] as const),
+  );
   const validator = data.transitiveDataValidation(
     encoderToValidator(
       parametersToValidator(
@@ -59,14 +62,26 @@ export function urlGeneric<
         },
       ),
     ),
-    (validatedUrl): data.DataValidatorResultSuccess<string> =>
-      // TODO validate url param strings against regexp!
-      ({
-        error: "none",
-        data: Array.from(
-          generateURLPath(fragments, argNames, validatedUrl),
-        ).join(""),
-      }),
+    (validatedUrl): data.DataValidatorResult<string> => {
+      const failedParameters = Object.entries(
+        validatedUrl as Record<string, string>,
+      ).filter(([argName, arg]) => !argNamesToRegExp[argName].test(arg));
+      return failedParameters.length > 0
+        ? {
+            error: "error",
+            errorInfo: Object.fromEntries(failedParameters),
+            getHumanReadableMessage: () =>
+              `Regexp validation failed for parameters: ${failedParameters
+                .map(([argName]) => `"${argName}"`)
+                .join(", ")}.`,
+          }
+        : {
+            error: "none",
+            data: Array.from(
+              generateURLPath(fragments, argNames, validatedUrl),
+            ).join(""),
+          };
+    },
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   return args.length > 0 ? (validator as any) : fragments[0];
@@ -106,8 +121,9 @@ export interface URLParameterInfo<
    * The name of the parameter.
    */
   name: TName;
+
   /**
-   * The 'native' decoder of paramter (io-ts/zod/runtypes/etc).
+   * The 'native' decoder of parameter (io-ts/zod/runtypes/etc).
    */
   encoder: data.MaterializeEncoder<TValidatorHKT, TRuntime, string>;
 
