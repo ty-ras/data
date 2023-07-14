@@ -54,6 +54,22 @@ test("Validate that calling url validator creator with wrong parameters fails", 
   });
 });
 
+test("Validate that url validator gives function callback that checks the given regexp", (c) => {
+  c.plan(2);
+  const url = newUrl`/prefix/${urlParam("param", "hello", /not-hello/)}/suffix`;
+  const result = url({ param: "hello" });
+  if (result.error === "error") {
+    c.like(result, {
+      error: "error",
+      errorInfo: { param: "hello" },
+    });
+    c.deepEqual(
+      result.getHumanReadableMessage(),
+      'Regexp validation failed for parameters: "param".',
+    );
+  }
+});
+
 function newUrl(fragments: TemplateStringsArray): string;
 function newUrl<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
