@@ -7,3 +7,4 @@ export type * from "./api-call-factory.types";
 export * from "./api-call-factory-factory";
 export * from "./errors";
 export * from "./url";
+export * from "./clients";

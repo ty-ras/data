@@ -1,5 +1,5 @@
 /**
- * @file This file contains code related to expressing TyRAS validators as [HKT]().
+ * @file This file contains code related to expressing TyRAS validators as [HKT](https://www.matechs.com/blog/encoding-hkts-in-typescript-once-again).
  */
 
 /**
