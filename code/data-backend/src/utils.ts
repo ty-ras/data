@@ -17,7 +17,7 @@ import type * as h from "./headers.types";
 export const checkHeaders = <
   THeaderData extends
     | protocol.TRequestHeadersDataBase
-    | protocol.TResponseHeadersDataBase,
+    | protocol.TResponseHeadersDataBase, // eslint-disable-line @typescript-eslint/no-duplicate-type-constituents
   IsDecoder extends boolean,
 >(
   headersValidation: h.HeaderDataValidators<THeaderData, IsDecoder>,

@@ -33,7 +33,7 @@ export type ResponseHeaderDataValidatorSpec<
 export type HeaderDataValidatorSpec<
   THeaderData extends
     | protocol.TRequestHeadersDataBase
-    | protocol.TResponseHeadersDataBase,
+    | protocol.TResponseHeadersDataBase, // eslint-disable-line @typescript-eslint/no-duplicate-type-constituents
   TValidatorHKT extends data.ValidatorHKTBase,
   IsDecoder extends boolean,
 > = s.StringDataValidatorSpec<
@@ -66,7 +66,7 @@ export type ResponseHeaderDataValidatorSpecMetadata<
 export type HeaderDataValidatorSpecMetadata<
   THeaderData extends
     | protocol.TRequestHeadersDataBase
-    | protocol.TResponseHeadersDataBase,
+    | protocol.TResponseHeadersDataBase, // eslint-disable-line @typescript-eslint/no-duplicate-type-constituents
   TValidatorHKT extends data.ValidatorHKTBase,
   IsDecoder extends boolean,
 > = s.StringDataValidatorSpecMetadata<
@@ -95,7 +95,7 @@ export type ResponseHeaderDataValidators<
 export type HeaderDataValidators<
   THeaderData extends
     | protocol.TRequestHeadersDataBase
-    | protocol.TResponseHeadersDataBase,
+    | protocol.TResponseHeadersDataBase, // eslint-disable-line @typescript-eslint/no-duplicate-type-constituents
   IsDecoder extends boolean,
 > = s.StringDataValidators<
   THeaderData,

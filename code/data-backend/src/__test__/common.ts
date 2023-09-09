@@ -42,7 +42,7 @@ export const CONTENT_TYPE = "text";
 
 export const VALIDATOR_NATIVE:
   | data.MaterializeDecoder<ValidatorHKT, string>
-  | data.MaterializeEncoder<ValidatorHKT, string, string> = "ValidatorNative";
+  | data.MaterializeEncoder<ValidatorHKT, string, string> = "ValidatorNative"; // eslint-disable-line @typescript-eslint/no-duplicate-type-constituents
 
 /**
  * This is validator to be used only for tests.
