@@ -8,3 +8,4 @@ export * from "./api-call-factory-factory";
 export * from "./errors";
 export * from "./url";
 export * from "./clients";
+export * from "./clients-errors";
