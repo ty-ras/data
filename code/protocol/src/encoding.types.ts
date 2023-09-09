@@ -2,6 +2,8 @@
  * @file This file contains types related to express some part of HTTP protocol data, type of which varies depending whether it is in transit, or loaded in JS app.
  */
 
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+
 /**
  * This interface should be used for data, type of which varies depending whether it is in transit, or loaded in JS app.
  *
