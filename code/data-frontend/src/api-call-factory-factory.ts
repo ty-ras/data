@@ -38,32 +38,29 @@ export const createAPICallFactoryGeneric = <
         response,
         url,
         ...rest
-      }:
-        | (apiCallFactory.MakeAPICallArgs<
-            TProtocolSpec["method"],
-            TProtocolSpec["responseBody"]
-          > &
-            (
-              | apiCallFactory.MakeAPICallArgsURL
-              | apiCallFactory.MakeAPICallArgsURLData<unknown>
-            )) &
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            (| {}
-              | apiCallFactory.MakeAPICallArgsHeadersData<
-                  Record<string, unknown>
-                >
-              | apiCallFactory.MakeAPICallArgsHeaderFunctionality<
-                  Record<string, string>
-                >
-              | apiCallFactory.MakeAPICallArgsResponseHeaders<
-                  Record<string, unknown>
-                >
-              | apiCallFactory.MakeAPICallArgsQuery<
-                  THKTEncoded,
-                  Record<string, unknown>
-                >
-              | apiCallFactory.MakeAPICallArgsBody<THKTEncoded, unknown>
-            )): apiCall.APICall<
+      }: (apiCallFactory.MakeAPICallArgs<
+        TProtocolSpec["method"],
+        TProtocolSpec["responseBody"]
+      > &
+        (
+          | apiCallFactory.MakeAPICallArgsURL
+          | apiCallFactory.MakeAPICallArgsURLData<unknown>
+        )) &
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        (| {}
+          | apiCallFactory.MakeAPICallArgsHeadersData<Record<string, unknown>>
+          | apiCallFactory.MakeAPICallArgsHeaderFunctionality<
+              Record<string, string>
+            >
+          | apiCallFactory.MakeAPICallArgsResponseHeaders<
+              Record<string, unknown>
+            >
+          | apiCallFactory.MakeAPICallArgsQuery<
+              THKTEncoded,
+              Record<string, unknown>
+            >
+          | apiCallFactory.MakeAPICallArgsBody<THKTEncoded, unknown>
+        )): apiCall.APICall<
         Partial<
           Record<"method" | "url" | "query" | "body" | "headers", unknown>
         > | void,
