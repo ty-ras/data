@@ -2,7 +2,7 @@
  * @file This file contains common utility methods used by unit tests.
  */
 import * as data from "@ty-ras/data";
-import * as util from "util";
+import * as util from "node:util";
 
 /**
  * Creates a new {@link data.DataValidator} which will return validated data only if it exactly matches (`===`) the given value.
