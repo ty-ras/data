@@ -4,8 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
-      "ESNext",
-      "DOM" // To get URL into global scope
+      "ES2022"
     ],
     "target": "ES2022",
     "esModuleInterop": true,
