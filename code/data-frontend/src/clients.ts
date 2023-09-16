@@ -28,7 +28,9 @@ export const ensurePathname = (pathname: string) => {
  * @param query The query parameters as named objects.
  * @returns The {@link URLSearchParams} with arrayed query parameters unwrapped.
  */
-export const getURLSearchParams = (query: Record<string, unknown>) =>
+export const getURLSearchParams = (
+  query: Record<string, unknown>,
+): URLSearchParams =>
   new URLSearchParams(
     Object.entries(query)
       .filter(([, value]) => value !== undefined)
